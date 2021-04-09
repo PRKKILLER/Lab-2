@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const kafka = require('kafka-node');
 
 function ConnectionProvider() {
