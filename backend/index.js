@@ -1,6 +1,6 @@
+/* eslint-disable no-console */
 /* eslint-disable consistent-return */
 const express = require('express');
-
 const morgan = require('morgan');
 
 const app = express();
