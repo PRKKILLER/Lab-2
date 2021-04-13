@@ -1,9 +1,15 @@
+/* eslint-disable func-names */
+/* eslint-disable no-use-before-define */
 /* eslint-disable no-console */
+/* eslint-disable camelcase */
 const crypto = require('crypto');
 const conn = require('./connection');
 
-const TIMEOUT = 8000; // time to wait for response in ms
+const TIMEOUT = 12000; // time to wait for response in ms
 let self;
+
+// eslint-disable-next-line no-multi-assign
+exports = module.exports = KafkaRPC;
 
 function KafkaRPC() {
   self = this;
@@ -13,19 +19,19 @@ function KafkaRPC() {
   this.producer = this.connection.getProducer();
 }
 
-KafkaRPC.prototype.makeRequest = (topicName, content, callback) => {
+KafkaRPC.prototype.makeRequest = function (topic_name, content, callback) {
   self = this;
   // generate a unique correlation id for this call
   const correlationId = crypto.randomBytes(16).toString('hex');
 
   // create a timeout for what should happen if we don't get a response
-  const tId = setTimeout((corrId) => {
+  const tId = setTimeout((corr_id) => {
     // if this ever gets called we didn't get a response in a
     // timely fashion
     console.log('timeout');
-    callback(new Error(`timeout ${corrId}`));
+    callback(new Error(`timeout ${corr_id}`));
     // delete the entry from hash
-    delete self.requests[corrId];
+    delete self.requests[corr_id];
   }, TIMEOUT, correlationId);
 
   // create a request entry to store in a hash
@@ -38,13 +44,13 @@ KafkaRPC.prototype.makeRequest = (topicName, content, callback) => {
   self.requests[correlationId] = entry;
 
   // make sure we have a response topic
-  self.setupResponseQueue(self.producer, topicName, () => {
+  self.setupResponseQueue(self.producer, topic_name, () => {
     console.log('in response');
     // put the request on a topic
 
     const payloads = [
       {
-        topic: topicName,
+        topic: topic_name,
         messages: JSON.stringify({
           correlationId,
           replyTo: 'response_topic',
@@ -56,14 +62,14 @@ KafkaRPC.prototype.makeRequest = (topicName, content, callback) => {
     console.log('in response1');
     console.log(self.producer.ready);
     self.producer.send(payloads, (err, data) => {
-      console.log('in response2');
+      console.log('in response2', data);
       if (err) console.log(err);
       console.log(data);
     });
   });
 };
 
-KafkaRPC.prototype.setupResponseQueue = (producer, topicName, next) => {
+KafkaRPC.prototype.setupResponseQueue = function (producer, topic_name, next) {
   // don't mess around if we have a queue
   if (this.response_queue) return next();
 
@@ -94,4 +100,3 @@ KafkaRPC.prototype.setupResponseQueue = (producer, topicName, next) => {
   console.log('returning next');
   return next();
 };
-module.exports = KafkaRPC;
