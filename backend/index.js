@@ -18,13 +18,13 @@ app.use((req, res, next) => {
   next();
 });
 
-// app.use('/profile', require('./routes/profileRoute'));
+app.use('/userauth', require('./route/profileRoute'));
 // app.use('/group', require('./routes/createGroupRoute'));
 // app.use('/mygroup', require('./routes/myGroupRoute'));
 // app.use('/RecentActivity', require('./routes/recentActivityRoute'));
 // app.use('/individualgroup', require('./routes/individualGroupRoute'));
 // app.use('/dashboard', require('./routes/dashboardRoute'));
 
-// start your server on port 3000
+// start your server on port 3002
 const port = process.env.PORT || 3002;
 app.listen(port, () => console.log(`listening on port ${port}`));

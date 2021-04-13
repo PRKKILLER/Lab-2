@@ -1,9 +1,8 @@
-const mongoose = require('mongoose');
+// const bcrypt = require('bcrypt');
+const mongoose = require('../mongoose');
 
 const { Schema } = mongoose;
-const bcrypt = require('bcrypt');
-
-const salt = 10;
+// const salt = 10;
 const usersSchema = new Schema({
   emailId: {
     type: String,
@@ -12,19 +11,13 @@ const usersSchema = new Schema({
   password: {
     type: String,
     required: true,
+    bcrypt: true,
   },
   name: {
     type: String,
-    required: true,
   },
   number: {
     type: String,
-    validate: {
-      validator(v) {
-        return /\d{3}-\d{3}-\d{4}/.test(v);
-      },
-      message: (props) => `${props.value} is not a valid phone number!`,
-    },
   },
   language: {
     type: String,
@@ -46,13 +39,8 @@ const usersSchema = new Schema({
 {
   versionKey: false,
 });
+usersSchema.plugin(require('mongoose-bcrypt'));
 
 const userModel = mongoose.model('user', usersSchema);
-userModel.pre('save', (next) => {
-  if (!this.isModified('password')) {
-    next();
-  }
-  this.password = bcrypt.hashSync(this.password, salt);
-  next();
-});
+
 module.exports = userModel;
