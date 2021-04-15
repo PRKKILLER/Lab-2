@@ -1,7 +1,8 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-console */
 const ConnectionProvider = require('./kafka/connection');
-const userAuth = require('./services/userAuth');
+const userAuthHandler = require('./services/userAuth');
+const passportHandler = require('./services/passport');
 
 function handleTopicRequest(topicName, fname) {
   // var topicName = 'root_topic';
@@ -31,4 +32,6 @@ function handleTopicRequest(topicName, fname) {
     });
   });
 }
-handleTopicRequest('signup', userAuth);
+handleTopicRequest('signup', userAuthHandler);
+handleTopicRequest('login', userAuthHandler);
+handleTopicRequest('passport', passportHandler);

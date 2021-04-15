@@ -3,8 +3,8 @@
 /* eslint-disable no-unused-vars */
 /* e
 slint-disable no-console */
+const bcrypt = require('bcrypt');
 const User = require('../database/models/userModel');
-// const bcrypt = require('bcrypt');
 
 const signUp = async (msg, callback) => {
   const res = {};
@@ -21,7 +21,7 @@ const signUp = async (msg, callback) => {
     console.log(userres, 'usercreated');
     try {
       await userres.save();
-      res.data = JSON.stringify(userres);
+      res.data = userres;
       res.status = 200;
       callback(null, res);
     } catch (e) {
@@ -33,14 +33,55 @@ const signUp = async (msg, callback) => {
   }
 };
 
+const login = async (msg, callback) => {
+  const res = {};
+  console.log('inside login service', msg.emailId);
+  try {
+    const userRes = await User.findOne({ emailId: msg.emailId }).exec();
+    if (userRes === undefined && userRes === null) {
+      console.log('user doesnot exist');
+      res.data = 'user doesnot exist';
+      res.status = 404;
+      callback(null, res);
+    }
+    const userres = userRes;
+    console.log('response 48', userres.password);
+    console.log('msg password', msg.password);
+    await bcrypt.compare(msg.password, userres.password, (
+      err,
+      isMatch,
+    ) => {
+      if (err) {
+        console.log('err', err);
+        callback(null, 'error');
+      } else if (!isMatch) {
+        res.status = 400;
+        res.data = 'Wrong Password';
+        callback(null, res);
+      } else {
+        console.log('Successful log in');
+        console.log('user object', userres);
+        res.status = 200;
+        res.data = userres;
+        callback(null, res);
+      }
+    });
+  } catch (e) {
+    console.log(e);
+    res.status = 404;
+    res.data = e;
+    console.log('login failed!!');
+    callback(null, 'error');
+  }
+};
+
 function handleRequest(msg, callback) {
   if (msg.path === 'signup') {
     delete msg.path;
     signUp(msg, callback);
-  } else if (msg.path === 'user-login') {
-    console.log(msg);
-    // delete msg.path;
-    // signUp(msg, callback);
+  } else if (msg.path === 'login') {
+    delete msg.path;
+    login(msg, callback);
   }
 }
 
