@@ -75,6 +75,28 @@ const login = async (msg, callback) => {
   }
 };
 
+const updateDetails = async (msg, callback) => {
+  const res = {};
+  console.log('user details service', msg);
+  try {
+    // eslint-disable-next-line max-len
+    const userRes = await User.findOneAndUpdate({ emailId: msg.emailId }, { new: true, useFindAndModify: true });
+    if (userRes === undefined && userRes === null) {
+      console.log('user doesnot exist');
+      res.data = 'user doesnot exist';
+      res.status = 404;
+      callback(null, res);
+    } else {
+      res.data = userRes;
+      res.status = 200;
+      callback(null, res);
+    }
+  } catch (e) {
+    res.status = 404;
+    res.data = e;
+    callback(null, 'error');
+  }
+};
 function handleRequest(msg, callback) {
   if (msg.path === 'signup') {
     delete msg.path;
@@ -82,6 +104,9 @@ function handleRequest(msg, callback) {
   } else if (msg.path === 'login') {
     delete msg.path;
     login(msg, callback);
+  } else if (msg.path === 'updateDetails') {
+    delete msg.path;
+    updateDetails(msg, callback);
   }
 }
 

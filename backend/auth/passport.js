@@ -16,7 +16,7 @@ function auth() {
       // eslint-disable-next-line no-underscore-dangle
       msg.id = jwtPayload._id;
       // eslint-disable-next-line consistent-return
-      kafka.make_request('passport', msg, (err, results) => {
+      kafka.make_Request('passport', msg, (err, results) => {
         if (err) {
           return callback(err, false);
         }

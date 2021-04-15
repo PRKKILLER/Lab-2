@@ -11,7 +11,7 @@ const kafka = require('../kafka/client');
 // const upload = multer({ storage });
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-const { auth, checkAuth } = require('../auth/passport');
+const { auth } = require('../auth/passport');
 // Route to handle Post Request Call
 // eslint-disable-next-line camelcase
 
@@ -71,7 +71,7 @@ router.post('/login', async (req, res) => {
       res.status(500).json({
         msg: 'System Error, Try Again.',
       });
-    } else {
+    } else if (results.status === 200) {
       const token = jwt.sign({
       // eslint-disable-next-line no-underscore-dangle
         id: results.data._id,
@@ -85,8 +85,10 @@ router.post('/login', async (req, res) => {
       // eslint-disable-next-line no-param-reassign
       results.token = jwtToken;
       res.status(200).json({
-        updatedList: results,
+        body: results,
       });
+    } else {
+      res.status(results.status).json({ body: results.data });
       res.end();
     }
   });
