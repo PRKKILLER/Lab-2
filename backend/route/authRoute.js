@@ -21,7 +21,7 @@ router.post('/signup', async (req, res) => {
   // });
   req.body.path = 'signup';
   console.log(req.body);
-  kafka.make_Request('signup', req.body, (err, results) => {
+  kafka.make_Request('user', req.body, (err, results) => {
     console.log('in result');
     console.log(results);
     if (err) {
@@ -63,7 +63,7 @@ router.post('/login', async (req, res) => {
   console.log('63', process.env.SECRET);
   req.body.path = 'login';
   console.log(req.body);
-  kafka.make_Request('login', req.body, (err, results) => {
+  kafka.make_Request('user', req.body, (err, results) => {
     console.log('in result');
     console.log(results);
     if (err) {

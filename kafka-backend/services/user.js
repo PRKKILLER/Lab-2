@@ -80,7 +80,30 @@ const updateDetails = async (msg, callback) => {
   console.log('user details service', msg);
   try {
     // eslint-disable-next-line max-len
-    const userRes = await User.findOneAndUpdate({ emailId: msg.emailId }, { new: true, useFindAndModify: true });
+    const userRes = await User.findOneAndUpdate({ emailId: msg.emailId }, msg, { new: true, useFindAndModify: true });
+    if (userRes === undefined && userRes === null) {
+      console.log('user doesnot exist');
+      res.data = 'user doesnot exist';
+      res.status = 404;
+      callback(null, res);
+    } else {
+      res.data = userRes;
+      res.status = 200;
+      callback(null, res);
+    }
+  } catch (e) {
+    res.status = 404;
+    res.data = e;
+    callback(null, 'error');
+  }
+};
+
+const getAllUsersExceptCurrent = async (msg, callback) => {
+  const res = {};
+  console.log('inside getAllUsersExceptCurrent', msg);
+  try {
+    // eslint-disable-next-line max-len
+    const userRes = await User.find({ emailId: { $ne: msg.emailId } }).select(['emailId']);
     if (userRes === undefined && userRes === null) {
       console.log('user doesnot exist');
       res.data = 'user doesnot exist';
@@ -107,6 +130,9 @@ function handleRequest(msg, callback) {
   } else if (msg.path === 'updateDetails') {
     delete msg.path;
     updateDetails(msg, callback);
+  } else if (msg.path === 'getAllUsersExceptCurrent') {
+    delete msg.path;
+    getAllUsersExceptCurrent(msg, callback);
   }
 }
 

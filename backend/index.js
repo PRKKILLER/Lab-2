@@ -34,6 +34,7 @@ app.use(session({
 
 app.use('/userauth', require('./route/authRoute'));
 app.use('/userProfile', require('./route/profileRoute'));
+app.use('/group', require('./route/createGroupRoute'));
 // app.use('/group', require('./routes/createGroupRoute'));
 // app.use('/mygroup', require('./routes/myGroupRoute'));
 // app.use('/RecentActivity', require('./routes/recentActivityRoute'));

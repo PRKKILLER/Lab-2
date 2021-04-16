@@ -1,8 +1,9 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-console */
 const ConnectionProvider = require('./kafka/connection');
-const userHandler = require('./services/userAuth');
+const userHandler = require('./services/user');
 const passportHandler = require('./services/passport');
+const groupHandler = require('./services/group');
 
 function handleTopicRequest(topicName, fname) {
   // var topicName = 'root_topic';
@@ -11,7 +12,7 @@ function handleTopicRequest(topicName, fname) {
   console.log('server is running ');
   consumer.on('message', (message) => {
     console.log(`message received for ${topicName} `, fname);
-    console.log(JSON.stringify(message.value));
+    console.log(message.value);
     const data = JSON.parse(message.value);
 
     fname.handleRequest(data.data, (err, res) => {
@@ -32,7 +33,6 @@ function handleTopicRequest(topicName, fname) {
     });
   });
 }
-handleTopicRequest('signup', userHandler);
-handleTopicRequest('login', userHandler);
+handleTopicRequest('user', userHandler);
 handleTopicRequest('passport', passportHandler);
-handleTopicRequest('updateDetails', userHandler);
+handleTopicRequest('group', groupHandler);

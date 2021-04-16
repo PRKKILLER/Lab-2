@@ -20,7 +20,7 @@ router.post('/userDetails', upload.single('file'), checkAuth, async (req, res) =
   s3.upload(params, async (error, data) => {
     console.log(await data.Location);
     req.body.image = data.Location;
-    kafka.make_Request('updateDetails', req.body, (err, results) => {
+    kafka.make_Request('user', req.body, (err, results) => {
       if (err) {
         console.log('Inside err');
         res.status(500).json({
