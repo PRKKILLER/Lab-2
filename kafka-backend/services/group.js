@@ -1,10 +1,15 @@
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
 /* eslint-disable no-param-reassign */
+const { MongooseDocument } = require('mongoose');
 const group = require('../database/models/groupModel');
 
 const creategroup = async (msg, callback) => {
   const res = {};
-  console.log('inside signup service', msg.emailId);
+  msg.users.push({ emailId: msg.creatorId });
+  console.log('inside create grp service', msg.emailId);
   // eslint-disable-next-line new-cap
   const userres = new group(msg);
   console.log(userres, 'usercreated');
@@ -16,23 +21,22 @@ const creategroup = async (msg, callback) => {
   } catch (e) {
     console.log(e);
     res.status = 500;
-    console.log('signup failed!!');
+    console.log('create group error');
     callback(null, 'error');
   }
 };
 const grouppicture = async (msg, callback) => {
   const res = {};
-  console.log('inside group service', msg);
+  console.log('inside group picture', msg);
   // eslint-disable-next-line new-cap
   try {
     // eslint-disable-next-line max-len
     const Res = await group.findOneAndUpdate({ _id: msg.groupId }, { URL: msg.URL }, { new: true, useFindAndModify: true });
     if (Res === undefined && Res === null) {
-      console.log('group doesnot exist');
-      res.data = 'user doesnot exist';
       res.status = 404;
       callback(null, res);
     } else {
+      await Res.save();
       res.data = Res;
       res.status = 200;
       callback(null, res);
@@ -40,6 +44,112 @@ const grouppicture = async (msg, callback) => {
   } catch (e) {
     res.status = 404;
     res.data = e;
+    console.log('group picture error');
+    callback(null, 'error');
+  }
+};
+
+const groupslist = async (msg, callback) => {
+  const res = {};
+  console.log('inside group list', msg);
+  // eslint-disable-next-line new-cap
+  try {
+    // eslint-disable-next-line max-len
+    const Res = await group.find().where('users.emailId').equals(msg.emailId)
+      .where('users.flag')
+      .equals(true);
+    if (Res === undefined && Res === null) {
+      console.log('group doesnot exist');
+      res.data = 'group doesnot exist';
+      res.status = 404;
+      callback(null, res);
+    } else {
+      console.log('data', Res);
+      res.data = Res;
+      res.status = 200;
+      callback(null, res);
+    }
+  } catch (e) {
+    res.status = 404;
+    res.data = e;
+    console.log('grouplist erroe');
+    callback(null, 'error');
+  }
+};
+
+const acceptinvitation = async (msg, callback) => {
+  const res = {};
+  console.log('inside accept invitation', msg);
+  // eslint-disable-next-line new-cap
+  try {
+    // eslint-disable-next-line max-len
+    const Res = await group.findById(msg.groupId).select({ users: 1 });
+    console.log('query res', Res);
+    // const newRes = Res.findOneAndUpdate({users:{emailId:msg.emailId }}, {});
+    if (Res === undefined && Res === null) {
+      console.log('group doesnot exist');
+      res.data = 'group doesnot exist';
+      res.status = 404;
+      callback(null, res);
+    } else {
+      for (const i in Res.users) {
+        if (Res.users[i].emailId === msg.emailId) {
+          Res.users[i].flag = true;
+        }
+      }
+      await Res.save();
+      console.log('data', Res);
+      res.data = Res;
+      res.status = 200;
+      callback(null, res);
+    }
+  } catch (e) {
+    res.status = 404;
+    res.data = e;
+    console.log(e);
+    console.log('grouplist error');
+    callback(null, 'error');
+  }
+};
+
+const leavegroup = async (msg, callback) => {
+  const res = {};
+  console.log('inside leave group', msg);
+  // eslint-disable-next-line new-cap
+  try {
+    // eslint-disable-next-line max-len
+    // const getDuesRes = await getDuesForGroup(msg.groupId, msg.userId);
+    const getDuesRes = false;
+    console.log('query res', getDuesRes);
+
+    if (getDuesRes === true) {
+      console.log('Dues pending cannot leave');
+      res.data = 'Dues pending cannot leave';
+      res.status = 500;
+      callback(null, res);
+    } else {
+      const Res = await group.findById(msg.groupId);
+      console.log('Res of group before for loop', Res);
+      for (let i = 0; i < Res.users.length; i += 1) {
+        console.log('133', Res.users[i]);
+        if (Res.users[i].emailId === msg.emailId) {
+          console.log('Now delete');
+          Res.users.splice(i, 1);
+        }
+      }
+      console.log('Res at line 137', Res);
+      const Resres = await Res.save();
+      console.log('save response', Resres);
+      console.log('data', Res);
+      res.data = Res;
+      res.status = 200;
+      callback(null, res);
+    }
+  } catch (e) {
+    res.status = 404;
+    res.data = e;
+    console.log(e);
+    console.log('grouplist error');
     callback(null, 'error');
   }
 };
@@ -51,14 +161,16 @@ function handleRequest(msg, callback) {
   } else if (msg.path === 'grouppicture') {
     delete msg.path;
     grouppicture(msg, callback);
+  } else if (msg.path === 'groupslist') {
+    delete msg.path;
+    groupslist(msg, callback);
+  } else if (msg.path === 'acceptinvitation') {
+    delete msg.path;
+    acceptinvitation(msg, callback);
+  } else if (msg.path === 'leavegroup') {
+    delete msg.path;
+    leavegroup(msg, callback);
   }
-  // }else if (msg.path === 'getAllUsersExceptCurrent') {
-  //   delete msg.path;
-  //   getAllUsersExceptCurrent(msg, callback);
-  // } else if (msg.path === 'updateDetails') {
-  //   delete msg.path;
-  //   updateDetails(msg, callback);
-  // }
 }
 
 exports.handleRequest = handleRequest;

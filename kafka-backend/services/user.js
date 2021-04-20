@@ -87,6 +87,7 @@ const updateDetails = async (msg, callback) => {
       res.status = 404;
       callback(null, res);
     } else {
+      await userRes.save();
       res.data = userRes;
       res.status = 200;
       callback(null, res);

@@ -4,6 +4,7 @@ const ConnectionProvider = require('./kafka/connection');
 const userHandler = require('./services/user');
 const passportHandler = require('./services/passport');
 const groupHandler = require('./services/group');
+const transactionHandler = require('./services/transaction');
 
 function handleTopicRequest(topicName, fname) {
   // var topicName = 'root_topic';
@@ -36,3 +37,4 @@ function handleTopicRequest(topicName, fname) {
 handleTopicRequest('user', userHandler);
 handleTopicRequest('passport', passportHandler);
 handleTopicRequest('group', groupHandler);
+handleTopicRequest('transaction', transactionHandler);
