@@ -36,9 +36,9 @@ app.use('/userauth', require('./route/authRoute'));
 app.use('/userProfile', require('./route/profileRoute'));
 app.use('/group', require('./route/createGroupRoute'));
 // app.use('/group', require('./routes/createGroupRoute'));
-// app.use('/mygroup', require('./routes/myGroupRoute'));
+app.use('/mygroup', require('./route/mygroupsRoute'));
 // app.use('/RecentActivity', require('./routes/recentActivityRoute'));
-// app.use('/individualgroup', require('./routes/individualGroupRoute'));
+app.use('/individualgroup', require('./route/individualGroupRoute'));
 // app.use('/dashboard', require('./routes/dashboardRoute'));
 
 // start your server on port 3002

@@ -10,8 +10,6 @@ const groupSchema = new Schema({
   },
   creatorId: {
     type: String,
-    required: true,
-    unique: true,
   },
   URL: {
     type: String,
