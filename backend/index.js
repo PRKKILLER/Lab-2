@@ -37,7 +37,7 @@ app.use('/userProfile', require('./route/profileRoute'));
 app.use('/group', require('./route/createGroupRoute'));
 // app.use('/group', require('./routes/createGroupRoute'));
 app.use('/mygroup', require('./route/mygroupsRoute'));
-// app.use('/RecentActivity', require('./routes/recentActivityRoute'));
+app.use('/RecentActivity', require('./route/recentactivityRoute'));
 app.use('/individualgroup', require('./route/individualGroupRoute'));
 app.use('/dashboard', require('./route/dashboardRoute'));
 
