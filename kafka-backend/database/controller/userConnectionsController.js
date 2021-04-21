@@ -106,7 +106,7 @@ const addUserDeus = async ({
       const newowes = Number(resfornegative.owes) - Number(owes);
       const deleteres = userconnections.deleteOne({ userthatowes: userthatowns, userthatowns: userthatowes, groupId });
       const responsecreate = await userconnections.create({
-        userthatowes: userthatowns, userthatowns: userthatowes, groupId, owes: newowes,
+        userthatowes: userthatowns, userthatowns: userthatowes, groupId, owes: newowes, groupName,
       });
       console.log('deleteres', deleteres);
       responsecreate.save();
