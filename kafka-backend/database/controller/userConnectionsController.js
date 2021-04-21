@@ -2,27 +2,51 @@
 const userconnections = require('../models/userconnectionsModel');
 const { getGroupUsersWithoutCurrent } = require('./groupController');
 
-const getDuesForGroup = async (groupId, userId) => {
+const getDuesForGroup = async (groupId, emailId) => {
   try {
-    console.log('inside getDuesForGroup userid', userId);
+    console.log('inside getDuesForGroup userid', emailId);
     console.log('inside getDuesForGroup groupId', groupId);
     const duesObject = await userconnections.find({
       groupId,
-      userthatowes: userId,
+      userthatowes: emailId,
       owes: { $ne: 0 },
     });
-    if (duesObject !== undefined || duesObject !== null) {
+    if (duesObject !== undefined && duesObject !== null && duesObject !== []) {
       return {
-        statusCode: 200,
+        status: 200,
         body: duesObject,
       };
     }
     return {
-      statusCode: 404,
+      status: 404,
       body: 'No such dues exists',
     };
   } catch (err) {
     console.log('err', err);
+    return {
+      statusCode: 500,
+      body: err,
+    };
+  }
+};
+const getgroupSummary = async (groupId) => {
+  try {
+    console.log('inside getgroupSummary groupId', groupId);
+    const summaryObject = await userconnections.find({
+      groupId,
+    });
+    if (summaryObject !== undefined && summaryObject !== null && summaryObject.lenght !== 0) {
+      return {
+        status: 200,
+        body: summaryObject,
+      };
+    }
+    return {
+      status: 500,
+      body: 'No dues exists for the group',
+    };
+  } catch (err) {
+    console.log('getgroupSummary error', err);
     return {
       statusCode: 500,
       body: err,
@@ -35,20 +59,16 @@ const addUserDeus = async ({
 }) => {
   try {
     const res = await userconnections.findOne({ userthatowes, userthatowns, groupId });
-    console.log('line 38', res);
     if (res !== null) {
-      console.log('line 40');
       //   console.log(res.dataValues.Owes);
       const NewOwes = Number(res.owes) + Number(owes);
       res.owes = NewOwes;
       res.save();
       return (res);
     }
-    console.log('line 47');
     const responsecreate = await userconnections.create({
       userthatowes, userthatowns, groupId, owes, groupName,
     });
-    console.log('line 51');
     return (responsecreate);
   } catch (err) {
     console.log(err);
@@ -80,4 +100,4 @@ const addUserDeusPool = async ({
     body: await Promise.all(addUserDeusRes),
   });
 };
-module.exports = { getDuesForGroup, addUserDeusPool };
+module.exports = { getgroupSummary, getDuesForGroup, addUserDeusPool };

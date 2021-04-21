@@ -5,6 +5,7 @@ const userHandler = require('./services/user');
 const passportHandler = require('./services/passport');
 const groupHandler = require('./services/group');
 const transactionHandler = require('./services/transaction');
+const userconnectionsHandler = require('./services/userConnections');
 
 function handleTopicRequest(topicName, fname) {
   // var topicName = 'root_topic';
@@ -38,3 +39,4 @@ handleTopicRequest('user', userHandler);
 handleTopicRequest('passport', passportHandler);
 handleTopicRequest('group', groupHandler);
 handleTopicRequest('transaction', transactionHandler);
+handleTopicRequest('userconnections', userconnectionsHandler);

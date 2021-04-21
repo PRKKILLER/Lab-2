@@ -1,6 +1,7 @@
+/* eslint-disable max-len */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-console */
-const { addTransaction } = require('../database/controller/transactionController');
+const { addTransaction, gettransactions } = require('../database/controller/transactionController');
 const { addRecentActivity } = require('../database/controller/recentactivityController');
 const { addUserDeusPool } = require('../database/controller/userConnectionsController');
 
@@ -44,7 +45,6 @@ const addExpense = async (msg, callback) => {
           activitybody: addActivityResponse.body,
           addduesbody: addUserDeusRes.body,
         };
-        console.log('fuckkkkkkkkkk');
         callback(null, res);
       } else if (addActivityResponse.status === 500) {
         res.status = 500;
@@ -64,7 +64,33 @@ const addExpense = async (msg, callback) => {
     res.status = 404;
     res.data = e;
     console.log(e);
-    console.log('grouplist error');
+    console.log('add expanse error');
+    callback(null, 'error');
+  }
+};
+
+const showExpanse = async (msg, callback) => {
+  const res = {};
+  console.log('data inside show expanse', msg);
+  const { groupId } = msg;
+  try {
+    const transactionres = await gettransactions(groupId);
+    console.log('line 76', transactionres);
+    if (transactionres.status === 200) {
+      console.log(transactionres);
+      res.status = 200;
+      res.data = transactionres;
+      callback(null, res);
+    } else if (transactionres.status === 500) {
+      res.status = 500;
+      res.data = transactionres.data;
+      callback(null, res);
+    }
+  } catch (e) {
+    res.status = 404;
+    res.data = e;
+    console.log(e);
+    console.log('show expanse error');
     callback(null, 'error');
   }
 };
@@ -72,10 +98,10 @@ function handleRequest(msg, callback) {
   if (msg.path === 'addExpense') {
     delete msg.path;
     addExpense(msg, callback);
+  } else if (msg.path === 'showExpanse') {
+    delete msg.path;
+    showExpanse(msg, callback);
   }
-  // } else if (msg.path === 'login') {
-  //   delete msg.path;
-  //   login(msg, callback);
   // } else if (msg.path === 'updateDetails') {
   //   delete msg.path;
   //   updateDetails(msg, callback);

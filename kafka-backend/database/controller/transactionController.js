@@ -30,4 +30,26 @@ const addTransaction = async ({
     return (res);
   }
 };
-module.exports = { addTransaction };
+
+const gettransactions = async (groupId) => {
+  const res = {};
+  try {
+    const resTransaction = await Transaction.find({ groupId }).exec();
+    if (resTransaction !== null && resTransaction !== undefined && resTransaction.length !== 0) {
+      console.log(resTransaction);
+      res.status = 200;
+      res.data = resTransaction;
+      return (res);
+    }
+    res.status = 500;
+    res.data = 'No transactions for groupId';
+    return (res);
+  } catch (e) {
+    console.log(e);
+    res.data = e;
+    res.status = 404;
+    console.log('get transaction failed!!');
+    return (res);
+  }
+};
+module.exports = { addTransaction, gettransactions };

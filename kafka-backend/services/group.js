@@ -1,10 +1,7 @@
-/* eslint-disable guard-for-in */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
 /* eslint-disable no-param-reassign */
-const { MongooseDocument } = require('mongoose');
+/* eslint-disable no-console */
 const group = require('../database/models/groupModel');
+const { getDuesForGroup } = require('../database/controller/userConnectionsController');
 
 const creategroup = async (msg, callback) => {
   const res = {};
@@ -92,7 +89,7 @@ const acceptinvitation = async (msg, callback) => {
       res.status = 404;
       callback(null, res);
     } else {
-      for (const i in Res.users) {
+      for (let i = 0; i < Res.users.length; i += 1) {
         if (Res.users[i].emailId === msg.emailId) {
           Res.users[i].flag = true;
         }
@@ -118,29 +115,21 @@ const leavegroup = async (msg, callback) => {
   // eslint-disable-next-line new-cap
   try {
     // eslint-disable-next-line max-len
-    // const getDuesRes = await getDuesForGroup(msg.groupId, msg.userId);
-    const getDuesRes = false;
+    const getDuesRes = await getDuesForGroup(msg.groupId, msg.emailId);
     console.log('query res', getDuesRes);
-
-    if (getDuesRes === true) {
+    if (getDuesRes.status === 200) {
       console.log('Dues pending cannot leave');
       res.data = 'Dues pending cannot leave';
       res.status = 500;
       callback(null, res);
     } else {
       const Res = await group.findById(msg.groupId);
-      console.log('Res of group before for loop', Res);
       for (let i = 0; i < Res.users.length; i += 1) {
-        console.log('133', Res.users[i]);
         if (Res.users[i].emailId === msg.emailId) {
-          console.log('Now delete');
           Res.users.splice(i, 1);
         }
       }
-      console.log('Res at line 137', Res);
-      const Resres = await Res.save();
-      console.log('save response', Resres);
-      console.log('data', Res);
+      await Res.save();
       res.data = Res;
       res.status = 200;
       callback(null, res);
