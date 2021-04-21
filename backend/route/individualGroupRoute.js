@@ -53,9 +53,9 @@ router.post('/showExpanse', async (req, res) => {
   });
 });
 
-router.post('/groupSummary', async (req, res) => {
-  req.body.path = 'groupSummary';
-  kafka.make_Request('userconnections', req.body, (err, results) => {
+router.post('/createNote', async (req, res) => {
+  req.body.path = 'createNote';
+  kafka.make_Request('notes', req.body, (err, results) => {
     if (err) {
       // eslint-disable-next-line no-console
       console.log('Inside err');
@@ -63,7 +63,7 @@ router.post('/groupSummary', async (req, res) => {
         msg: 'System Error, Try Again.',
       });
     } else if (results.status === 200) {
-      console.log('data inside route', results);
+      console.log('data inside createnote', results);
       res.status(200).json({
         data: results.data,
       });
@@ -75,13 +75,51 @@ router.post('/groupSummary', async (req, res) => {
       res.end();
     }
   });
-  // const userSummaryres = await getUserSummary(GroupId);
-  // console.log('received data', userSummaryres);
-  // if (userSummaryres.status === 200) {
-  //   console.log(userSummaryres);
-  //   res.send(userSummaryres);
-  // } else {
-  //   res.status(500).send(userSummaryres.body);
-  // }
+});
+router.post('/deleteNote', async (req, res) => {
+  req.body.path = 'deleteNote';
+  kafka.make_Request('notes', req.body, (err, results) => {
+    if (err) {
+      // eslint-disable-next-line no-console
+      console.log('Inside err');
+      res.status(500).json({
+        msg: 'System Error, Try Again.',
+      });
+    } else if (results.status === 200) {
+      console.log('data inside deletenote route', results);
+      res.status(200).json({
+        data: results.data,
+      });
+      res.end();
+    } else {
+      res.json({
+        data: results,
+      });
+      res.end();
+    }
+  });
+});
+router.post('/getNote', async (req, res) => {
+  req.body.path = 'getNote';
+  kafka.make_Request('notes', req.body, (err, results) => {
+    if (err) {
+      // eslint-disable-next-line no-console
+      console.log('Inside err');
+      res.status(500).json({
+        msg: 'System Error, Try Again.',
+      });
+    } else if (results.status === 200) {
+      console.log('data inside deletenote route', results);
+      res.status(200).json({
+        data: results.data,
+      });
+      res.end();
+    } else {
+      res.json({
+        data: results,
+      });
+      res.end();
+    }
+  });
 });
 module.exports = router;

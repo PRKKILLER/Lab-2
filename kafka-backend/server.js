@@ -7,6 +7,7 @@ const groupHandler = require('./services/group');
 const transactionHandler = require('./services/transaction');
 const userconnectionsHandler = require('./services/userConnections');
 const recentactivityHandler = require('./services/recentActivity');
+const notesHandler = require('./services/notes');
 
 function handleTopicRequest(topicName, fname) {
   // var topicName = 'root_topic';
@@ -42,3 +43,4 @@ handleTopicRequest('group', groupHandler);
 handleTopicRequest('transaction', transactionHandler);
 handleTopicRequest('userconnections', userconnectionsHandler);
 handleTopicRequest('recentactivity', recentactivityHandler);
+handleTopicRequest('notes', notesHandler);
