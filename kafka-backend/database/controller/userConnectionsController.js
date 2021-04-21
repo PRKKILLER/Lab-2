@@ -90,11 +90,29 @@ const addUserDeus = async ({
       res.owes = NewOwes;
       res.save();
       return (res);
+    } if (res === null) {
+      const resfornegative = await userconnections.findOne({ userthatowes: userthatowns, userthatowns: userthatowes, groupId });
+      if (resfornegative === null) {
+        const responsecreate = await userconnections.create({
+          userthatowes, userthatowns, groupId, owes, groupName,
+        });
+        return (responsecreate);
+      }
+      if (Number(resfornegative.owes) > Number(owes)) {
+        resfornegative.owes = Number(resfornegative.owes) - Number(owes);
+        resfornegative.save();
+        return (resfornegative);
+      }
+      const newowes = Number(resfornegative.owes) - Number(owes);
+      const deleteres = userconnections.deleteOne({ userthatowes: userthatowns, userthatowns: userthatowes, groupId });
+      const responsecreate = await userconnections.create({
+        userthatowes: userthatowns, userthatowns: userthatowes, groupId, owes: newowes,
+      });
+      console.log('deleteres', deleteres);
+      responsecreate.save();
+      return (resfornegative);
     }
-    const responsecreate = await userconnections.create({
-      userthatowes, userthatowns, groupId, owes, groupName,
-    });
-    return (responsecreate);
+    return ('err');
   } catch (err) {
     console.log(err);
     return (err);
