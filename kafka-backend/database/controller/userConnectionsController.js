@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-console */
 const userconnections = require('../models/userconnectionsModel');
 const { getGroupUsersWithoutCurrent } = require('./groupController');
@@ -12,21 +13,21 @@ const getDuesForGroup = async (groupId, emailId) => {
       owes: { $ne: 0 },
     });
     if (duesObject !== undefined && duesObject !== null && duesObject !== []) {
-      return {
+      return ({
         status: 200,
         body: duesObject,
-      };
+      });
     }
-    return {
+    return ({
       status: 404,
       body: 'No such dues exists',
-    };
+    });
   } catch (err) {
     console.log('err', err);
-    return {
+    return ({
       statusCode: 500,
       body: err,
-    };
+    });
   }
 };
 const getgroupSummary = async (groupId) => {
@@ -35,22 +36,46 @@ const getgroupSummary = async (groupId) => {
     const summaryObject = await userconnections.find({
       groupId,
     });
-    if (summaryObject !== undefined && summaryObject !== null && summaryObject.lenght !== 0) {
-      return {
+    if (summaryObject !== undefined && summaryObject !== null && summaryObject.length !== 0) {
+      return ({
         status: 200,
         body: summaryObject,
-      };
+      });
     }
-    return {
+    return ({
       status: 500,
       body: 'No dues exists for the group',
-    };
+    });
   } catch (err) {
     console.log('getgroupSummary error', err);
-    return {
+    return ({
       statusCode: 500,
       body: err,
-    };
+    });
+  }
+};
+
+const settleUpUsers = async (userthatowns, userthatowes) => {
+  try {
+    console.log('inside settleUpUsers groupId', userthatowns, userthatowes);
+    const settleUpUsersObject = await userconnections.findOneAndUpdate({ userthatowns, userthatowes }, { owes: 0 }, { new: true, useFindAndModify: true });
+    console.log('seetleup response', settleUpUsersObject);
+    if (settleUpUsersObject !== undefined && settleUpUsersObject !== null && settleUpUsersObject.length !== 0) {
+      return ({
+        status: 200,
+        body: settleUpUsersObject,
+      });
+    }
+    return ({
+      status: 500,
+      body: 'No dues exists for these users',
+    });
+  } catch (err) {
+    console.log('getgroupSummary error', err);
+    return ({
+      statusCode: 500,
+      body: err,
+    });
   }
 };
 
@@ -100,4 +125,56 @@ const addUserDeusPool = async ({
     body: await Promise.all(addUserDeusRes),
   });
 };
-module.exports = { getgroupSummary, getDuesForGroup, addUserDeusPool };
+
+const getUserOwed = async (emailId) => {
+  try {
+    console.log('inside getUserOwed', emailId);
+    const getUserOwedObject = await userconnections.find({
+      userthatowns: emailId,
+    });
+    if (getUserOwedObject !== undefined && getUserOwedObject !== null && getUserOwedObject.length !== 0) {
+      return ({
+        status: 200,
+        body: getUserOwedObject,
+      });
+    }
+    return ({
+      status: 500,
+      body: 'No one owes user any thing',
+    });
+  } catch (err) {
+    console.log('getUserOwedObject error', err);
+    return ({
+      status: 404,
+      body: err,
+    });
+  }
+};
+
+const getUserOwes = async (emailId) => {
+  try {
+    console.log('inside getUserOwes ', emailId);
+    const summaryObject = await userconnections.find({
+      userthatowes: emailId,
+    });
+    if (summaryObject !== undefined && summaryObject !== null && summaryObject.length !== 0) {
+      return ({
+        status: 200,
+        body: summaryObject,
+      });
+    }
+    return ({
+      status: 500,
+      body: 'User owes noothing',
+    });
+  } catch (err) {
+    console.log('getgroupSummary error', err);
+    return ({
+      status: 404,
+      body: err,
+    });
+  }
+};
+module.exports = {
+  settleUpUsers, getgroupSummary, getDuesForGroup, addUserDeusPool, getUserOwed, getUserOwes,
+};
