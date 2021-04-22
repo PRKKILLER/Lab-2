@@ -1,0 +1,40 @@
+.table{
+    box-shadow: 0 0 10px #ccd2d6;
+    border-color: #454d55;
+    width:700px;
+}
+.btn-outline-secondary{
+    width:150px; 
+}
+.btn-outline-secondary:hover{
+    background: #ff652f;
+color: #fff;
+text-shadow: 0 -1px 0 #c83400;
+
+}
+.css-2b097c-container{
+    width:150px;
+}
+tr{
+    cursor:pointer;
+}
+.rrrow{
+    left: 20px;
+    top: 20px;
+    position: relative;
+    padding-top: 30px;
+}
+.col{
+    height:100%;
+}
+.col-sm-12{
+ padding-top: 40px;
+}
+.GotoGroup{
+    width:300px;
+    margin:0px;
+}
+.css-2b097c-container{
+    width:150px;
+    margin:0px;
+}

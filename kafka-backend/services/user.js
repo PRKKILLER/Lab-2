@@ -11,7 +11,7 @@ const signUp = async (msg, callback) => {
   console.log('inside signup service', msg.emailId);
   const userExists = await User.findOne({ emailId: msg.emailId }).exec();
   console.log(userExists, 'userExists reply');
-  if (userExists !== undefined && userExists !== null) {
+  if (userExists !== undefined && userExists !== null && userExists.lenght !== 0) {
     console.log('userexist');
     res.status = 404;
     res.body = 'userexist';

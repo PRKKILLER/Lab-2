@@ -48,7 +48,7 @@ router.post('/signup', async (req, res) => {
       results.token = jwtToken;
       console.log('Inside else');
       res.json({
-        updatedList: results,
+        body: results,
       });
       res.end();
     }
