@@ -46,7 +46,7 @@ class UpperNavbar extends Component {
       <Container className="upperNavbar">
         <div>
           {' '}
-          <img id="logo" className="rounded-cirlce" src="https://assets.splitwise.com/assets/core/logo-wordmark-horizontal-white-short-c309b91b96261a8a993563bdadcf22a89f00ebb260f4f04fd814c2249a6e05d4.svg" />
+          <img id="logosplit" className="rounded-cirlce" src="https://assets.splitwise.com/assets/core/logo-wordmark-horizontal-white-short-c309b91b96261a8a993563bdadcf22a89f00ebb260f4f04fd814c2249a6e05d4.svg" />
 
           <img id="profilepic" src={currentURL} />
           <a

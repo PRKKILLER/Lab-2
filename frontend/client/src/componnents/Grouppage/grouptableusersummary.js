@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/prefer-stateless-function */
@@ -7,11 +8,11 @@ import '../../styles/mygroups.css';
 
 class Usersummary extends Component {
   render() {
-    console.log('this user summary props data', this.props.data);
+    // console.log('this user summary props data', this.props.data);
     return (
       <div className="UserSummaryTable">
         <ul className="list-group list-group-item-success">
-          {this.props.data.map((usersummary) => (
+          {/* {this.props.data.map((usersummary) => (
             <li className="list-group-item">
               {usersummary.UserId1}
               {' '}
@@ -22,7 +23,9 @@ class Usersummary extends Component {
               {usersummary.Owes}
               $
             </li>
-          ))}
+          ))} */}
+          <li>blah</li>
+          <li>blah</li>
         </ul>
       </div>
     //   <table className="table" id="grouppagetable">

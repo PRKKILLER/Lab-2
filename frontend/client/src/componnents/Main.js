@@ -31,7 +31,8 @@ class Main extends Component {
         <Route path="/dashboard" component={dashboard} />
         <Route path="/creategroup" component={creategroup} />
         <Route path="/mygroups" component={mygroups} />
-        <Route path="/group/" render={(props) => <GroupPage {...props} />} />
+        {/* <Route path="/group/" render={(props) => <GroupPage {...props} />} /> */}
+        <Route path="/group" component={GroupPage} />
         <Route path="/recentactivity" component={Recentactivity} />
         <Route path="/profilepage" component={profilepage} />
         <Route path="/landing" component={landing} />

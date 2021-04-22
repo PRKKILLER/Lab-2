@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
 /* eslint-disable react/no-unused-state */
 /* eslint-disable react/prop-types */
@@ -28,15 +29,15 @@ class GroupPage extends Component {
   }
 
   componentDidMount = async () => {
-    console.log('group id', this.props.location.state.group);
-    const groupId = this.props.location.state.group;
-    console.log('group id', groupId);
-    const resForExpenseList = await axios.get(`http://localhost:3002/individualgroup/showexpanse/${groupId}`);
-    console.log('Expanse', resForExpenseList.data);
-    this.setState({ expenses: resForExpenseList.data.data });
-    const resForUserSummary = await axios.get(`http://localhost:3002/individualgroup/Groupsummary/${groupId}`);
-    console.log('summary', resForUserSummary.data);
-    this.setState({ usersummary: resForUserSummary.data.body });
+    // console.log('group id', this.props.location.state.group);
+    // const groupId = this.props.location.state.group;
+    // console.log('group id', groupId);
+    // const resForExpenseList = await axios.get(`http://localhost:3002/individualgroup/showexpanse/${groupId}`);
+    // console.log('Expanse', resForExpenseList.data);
+    // this.setState({ expenses: resForExpenseList.data.data });
+    // const resForUserSummary = await axios.get(`http://localhost:3002/individualgroup/Groupsummary/${groupId}`);
+    // console.log('summary', resForUserSummary.data);
+    // this.setState({ usersummary: resForUserSummary.data.body });
   }
 
   render() {
@@ -45,9 +46,12 @@ class GroupPage extends Component {
       <div>
         <UpperNavbar />
         <SideNavbar />
-        <Example GroupId={this.props.location.state.group}/>
+        {/* <Example GroupId={this.props.location.state.group}/>
         <TablePage data={this.state.expenses}/>
-        <Usersummary data={this.state.usersummary}/>
+        <Usersummary data={this.state.usersummary}/> */}
+        <Example />
+        <TablePage />
+        <Usersummary />
       </div>
     );
   }

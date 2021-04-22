@@ -1,13 +1,17 @@
 .jumbotron-group {
-    height: 150px;
-    padding: 10px;
-    border-color: #ccd2d6;
-    box-shadow: 0 0 10px #ccd2d6;
+height: 150px;
+padding: 10px;
+border-color: #ccd2d6;
+box-shadow: 0 0 10px #ccd2d6;
+position: relative;
+right: 47px;
+padding-right: 100px;
 }
 #grouppagetable{
     position: absolute;
     top: 210px;
-    left: 370px;
+    left: 160px;
+    border-radius: 10px;
 }
 .UserSummaryTable{
     right: 20px;
@@ -31,9 +35,6 @@
 }
 .justify-content-md-center-group{
     height: 200px;
-   
-    padding-top: 20px;
-    width: 780px;
     padding-top: 0px;
 }
 #expense_button{
@@ -102,4 +103,34 @@ color: #333;
 -webkit-border-radius: 0;
 -moz-border-radius: 0;
 border-radius: 0;
+}
+.notes{
+    height:34px;
+    font-size: 15px;
+    padding:5px;
+    width:240px;
+    border: 0px solid rgba(0,0,0,.125);
+}
+.post{
+    background: #ff652f;
+    color: #fff;
+    text-shadow: 0 -1px 0 #c83400;
+    border-color:rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
+    margin: 5px;
+}
+.post:hover{
+    text-decoration-color: #fff;
+}
+.noteslist{
+    width:240px;
+}
+.deletenote{
+float:right;
+padding:2px;
+}
+.Description{
+    min-width:180px;
+}
+.PaidBy{
+    min-width:100px;
 }
