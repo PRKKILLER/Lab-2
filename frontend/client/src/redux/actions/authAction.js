@@ -5,6 +5,7 @@
 /* eslint-disable import/named */
 import axios from 'axios';
 import Types from '../constants/authActionTypes';
+import API from '../../config';
 
 const loginDispatcher = (payload) => ({
   type: Types.login, payload,
@@ -23,7 +24,7 @@ const createUserDispatcher = (payload) => ({
 });
 
 const loginUser = (payload) => (dispatch) => {
-  axios.post('http://localhost:3002/userauth/login', payload)
+  axios.post(`${API.host}/userauth/login`, payload)
     .then((response) => {
       console.log('Status Code : ', response);
       if (response.status === 200) {
@@ -50,7 +51,7 @@ const loginUser = (payload) => (dispatch) => {
 const createUser = (payload) => async (dispatch) => {
   console.log(payload);
   try {
-    const response = await axios.post('http://localhost:3002/userauth/signup', payload);
+    const response = await axios.post(`${API.host}/userauth/signup`, payload);
     console.log('Status Code : ', response);
     if (response.status === 200) {
       console.log(response);
