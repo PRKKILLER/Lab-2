@@ -55,16 +55,16 @@ class dashboard extends Component {
   }
 
   render() {
-    let EmailId = localStorage.getItem('EmailId');
+    const token = localStorage.getItem('token');
     let redirectVar = null;
-    let currentURL = '';
-    if (EmailId === false || EmailId === undefined || EmailId === null) {
+    const currentURL = '';
+    if (token === false || token === undefined || token === null) {
       redirectVar = <Redirect to="/login" />;
     } else {
-      EmailId = EmailId.charAt(0).toUpperCase() + EmailId.slice(1);
-      const urlstring = EmailId.replace('@', '%40');
-      currentURL = `https://splitwisebucket.s3.us-east-2.amazonaws.com/${urlstring}`;
-      console.log('Current User url', currentURL);
+      // EmailId = EmailId.charAt(0).toUpperCase() + EmailId.slice(1);
+      // const urlstring = EmailId.replace('@', '%40');
+      // currentURL = `https://splitwisebucket.s3.us-east-2.amazonaws.com/${urlstring}`;
+      // console.log('Current User url', currentURL);
     }
     return (
       <div>

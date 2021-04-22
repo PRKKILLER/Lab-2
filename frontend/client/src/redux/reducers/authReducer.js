@@ -1,39 +1,43 @@
 /* eslint-disable no-console */
-import Types from '../constants/authActionTypes';
+import {
+  login, signup, unauthenticated, logout,
+} from '../constants/types';
 
 const initialState = {
   authenticated: false,
   error: '',
-  currentUser: {},
+  tempUser: {},
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case Types.login: {
+    case login: {
       console.log('login', action.payload);
-      localStorage.setItem('token', action.payload.body.token);
+      localStorage.setItem('token', JSON.stringify(action.payload.body.token));
+      localStorage.setItem('user', JSON.stringify(action.payload.body.data));
       return {
         authenticated: true, // after update user formsubmition reset
-        currentUser: action.payload.body.data,
+        tempUser: action.payload,
       };
     }
-    case Types.signup: {
+    case signup: {
       console.log('InsideSignup', action.payload);
-      localStorage.setItem('token', action.payload.body.token);
+      localStorage.setItem('token', JSON.stringify(action.payload.body.token));
+      localStorage.setItem('user', JSON.stringify(action.payload.body.data));
       return {
         authenticated: true, // after update user formsubmition reset
-        currentUser: action.payload.body.data,
+        tempUser: action.payload,
       };
     }
-    case Types.unauthenticated: {
+    case unauthenticated: {
       console.log(action.payload);
       return {
         authenticated: false,
       };
     }
-    case Types.logout: {
+    case logout: {
       console.log('Inside logout');
-      localStorage.removeItem('EmailId');
+      localStorage.removeItem('token');
       return {
         authenticated: false, // after update user formsubmition reset
       };

@@ -25,12 +25,11 @@ class Main extends Component {
     return (
       <div>
         {/* Render Different Component based on Route */}
-
         <Route path="/login" component={Login} />
-        <Route path="/signup" component={signup} />
-        {/* <Route path="/dashboard/dashboard" component={dashboard} />
-        <Route path="/group/creategroup" component={creategroup} />
-        <Route path="/group/mygroups" component={mygroups} /> */}
+        <Route exact path="/signup" component={signup} />
+        <Route path="/dashboard" component={dashboard} />
+        {/* <Route path="/group/creategroup" component={creategroup} />
+        <Route path="/group/mygroups" component={mygroups} />  */}
         {/* <Route path="/group/" render={(props) => <GroupPage {...props} />} /> */}
         {/* <Route path="/group/individualgroup" component={GroupPage} />
         <Route path="/activity/recentactivity" component={Recentactivity} /> */}

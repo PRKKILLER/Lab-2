@@ -16,6 +16,7 @@ import Container from 'react-bootstrap/Container';
 import { createUser } from '../../redux/actions/authAction';
 import '../../styles/signup.css';
 import '../../styles/landing.css';
+import { setProfileDispatcher } from '../../redux/actions/profileAction';
 
 // Define a Login Component
 class signup extends Component {
@@ -75,6 +76,7 @@ class signup extends Component {
         // make a post request with the user data
         const data = { emailId, password, name };
         this.props.createUser(data);
+        this.props.setProfileDispatcher();
         console.log('current props: ', this.props.currentUser);
       } else {
         alert('Enter valid Email Id');
@@ -130,10 +132,12 @@ class signup extends Component {
 
 const mapStateToProps = (state) => ({
   authenticated: state.auth.authenticated,
+  profile: state.profile.user,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   createUser: (payload) => dispatch(createUser(payload)),
+  setProfileDispatcher: () => dispatch(setProfileDispatcher()),
 });
 
 // export Login Component

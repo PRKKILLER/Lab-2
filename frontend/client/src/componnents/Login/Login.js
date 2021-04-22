@@ -12,6 +12,9 @@ import Button from 'react-bootstrap/Button';
 import '../../styles/login.css';
 import { connect } from 'react-redux';
 import { loginUser } from '../../redux/actions/authAction';
+// eslint-disable-next-line no-unused-vars
+import { setProfileDispatcher } from '../../redux/actions/profileAction';
+
 import '../../styles/landing.css';
 // Define a Login Component
 class Login extends Component {
@@ -65,6 +68,7 @@ class Login extends Component {
       // make a post request with the user data
         const data = { emailId, password };
         this.props.loginUser(data);
+        this.props.setProfileDispatcher();
         console.log('current props: ', this.props.currentUser);
       } else {
         alert('Enter valid Email Id');
@@ -74,7 +78,7 @@ class Login extends Component {
     render() {
       // redirect based on successful login
       if (this.props.authUser) {
-        return <Redirect to="/dashboard" />;
+        return <Redirect to="/profilepage" />;
       }
       return (
         <div>
@@ -115,10 +119,12 @@ class Login extends Component {
 }
 const mapStateToProps = (state) => ({
   authUser: state.auth.authenticated,
+  profile: state.profile.user,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   loginUser: (payload) => dispatch(loginUser(payload)),
+  setProfileDispatcher: () => dispatch(setProfileDispatcher()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

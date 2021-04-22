@@ -4,23 +4,26 @@
 /* eslint-disable no-console */
 /* eslint-disable import/named */
 import axios from 'axios';
-import Types from '../constants/authActionTypes';
+import {
+  login, signup, unauthenticated, logout,
+} from '../constants/types';
+
 import API from '../../config';
 
 const loginDispatcher = (payload) => ({
-  type: Types.login, payload,
+  type: login, payload,
 });
 
 const unauthDispatcher = (payload) => ({
-  type: Types.unauthenticated, payload,
+  type: unauthenticated, payload,
 });
 
 const logoutDispatcher = (payload) => ({
-  type: Types.logout, payload,
+  type: logout, payload,
 });
 
 const createUserDispatcher = (payload) => ({
-  type: Types.signup, payload,
+  type: signup, payload,
 });
 
 const loginUser = (payload) => (dispatch) => {
@@ -38,7 +41,7 @@ const loginUser = (payload) => (dispatch) => {
     })
     .catch((err) => {
       if (err) {
-        alert('err');
+        console.log('error', err);
       } else if (err.response.data.errors.body === 'Unauth User') {
         alert('Wrong Email Or Password');
         console.log(err.response.data.errors);
