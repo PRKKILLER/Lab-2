@@ -30,14 +30,15 @@ const loginUser = (payload) => (dispatch) => {
       if (response.status === 200) {
         console.log('Response data', response);
         dispatch(loginDispatcher(response.data));
-      } else if (response.status === 400) {
-        console.log('hiii');
+      } else if (response.status === 204) {
         alert('Wrong Password');
+      } else if (response.status === 404) {
+        alert('User does not exist');
       }
     })
     .catch((err) => {
-      if (err.response.data) {
-        alert('Wrong Email Or Password');
+      if (err) {
+        alert('err');
       } else if (err.response.data.errors.body === 'Unauth User') {
         alert('Wrong Email Or Password');
         console.log(err.response.data.errors);
@@ -56,8 +57,8 @@ const createUser = (payload) => async (dispatch) => {
     if (response.status === 200) {
       console.log(response);
       dispatch(createUserDispatcher(response.data));
-    } else if (response.status === 202) {
-      alert(response.data.error);
+    } else if (response.status === 204) {
+      alert('user already exist');
     }
   } catch (err) {
     console.log(err);

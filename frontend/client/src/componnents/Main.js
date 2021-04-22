@@ -28,12 +28,12 @@ class Main extends Component {
 
         <Route path="/login" component={Login} />
         <Route path="/signup" component={signup} />
-        <Route path="/dashboard" component={dashboard} />
-        <Route path="/creategroup" component={creategroup} />
-        <Route path="/mygroups" component={mygroups} />
+        {/* <Route path="/dashboard/dashboard" component={dashboard} />
+        <Route path="/group/creategroup" component={creategroup} />
+        <Route path="/group/mygroups" component={mygroups} /> */}
         {/* <Route path="/group/" render={(props) => <GroupPage {...props} />} /> */}
-        <Route path="/group" component={GroupPage} />
-        <Route path="/recentactivity" component={Recentactivity} />
+        {/* <Route path="/group/individualgroup" component={GroupPage} />
+        <Route path="/activity/recentactivity" component={Recentactivity} /> */}
         <Route path="/profilepage" component={profilepage} />
         <Route path="/landing" component={landing} />
       </div>

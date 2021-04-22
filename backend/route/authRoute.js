@@ -26,11 +26,11 @@ router.post('/signup', async (req, res) => {
     console.log(results);
     if (err) {
       console.log('Inside err');
-      res.status(500).json({
+      res.status(404).json({
         msg: 'System Error, Try Again.',
       });
-    } else if (results.status === 404) {
-      res.status(404).json({
+    } else if (results.status === 500) {
+      res.status(204).json({
         msg: 'User Exist',
       });
     } else {
@@ -68,7 +68,7 @@ router.post('/login', async (req, res) => {
     console.log(results);
     if (err) {
       console.log('Inside err');
-      res.status(500).json({
+      res.status(404).json({
         msg: 'System Error, Try Again.',
       });
     } else if (results.status === 200) {
@@ -87,8 +87,8 @@ router.post('/login', async (req, res) => {
       res.status(200).json({
         body: results,
       });
-    } else {
-      res.status(results.status).json({ body: results.data });
+    } else if (results.status === 400) {
+      res.status(204);
       res.end();
     }
   });

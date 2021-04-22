@@ -75,6 +75,7 @@ class signup extends Component {
         // make a post request with the user data
         const data = { emailId, password, name };
         this.props.createUser(data);
+        console.log('current props: ', this.props.currentUser);
       } else {
         alert('Enter valid Email Id');
       }

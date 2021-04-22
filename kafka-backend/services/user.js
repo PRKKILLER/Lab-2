@@ -13,7 +13,7 @@ const signUp = async (msg, callback) => {
   console.log(userExists, 'userExists reply');
   if (userExists !== undefined && userExists !== null && userExists.lenght !== 0) {
     console.log('userexist');
-    res.status = 404;
+    res.status = 500;
     res.body = 'userexist';
     callback(null, res);
   } else {
