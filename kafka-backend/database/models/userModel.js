@@ -15,9 +15,11 @@ const usersSchema = new Schema({
   },
   name: {
     type: String,
+    required: true,
   },
   number: {
     type: String,
+    default: '000000000000',
   },
   language: {
     type: String,
@@ -33,7 +35,7 @@ const usersSchema = new Schema({
   },
   image: {
     type: String,
-    default: 'userPlaceholder.png',
+    default: 'https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-teal36-100px.png',
   },
 },
 {

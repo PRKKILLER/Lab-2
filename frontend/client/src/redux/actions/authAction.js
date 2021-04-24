@@ -33,10 +33,8 @@ const loginUser = (payload) => (dispatch) => {
       if (response.status === 200) {
         console.log('Response data', response);
         dispatch(loginDispatcher(response.data));
-      } else if (response.status === 204) {
-        alert('Wrong Password');
-      } else if (response.status === 404) {
-        alert('User does not exist');
+      } else {
+        alert('An error occured', response.data);
       }
     })
     .catch((err) => {
@@ -61,6 +59,8 @@ const createUser = (payload) => async (dispatch) => {
       console.log(response);
       dispatch(createUserDispatcher(response.data));
     } else if (response.status === 204) {
+      alert(response.body);
+    } else if (response.status === 205) {
       alert('user already exist');
     }
   } catch (err) {

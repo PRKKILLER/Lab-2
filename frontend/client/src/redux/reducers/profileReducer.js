@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable import/named */
 /* eslint-disable import/extensions */
 import { UPDATEPROFILE, SETPROFILE } from '../constants/types';
@@ -10,8 +11,9 @@ const profileReducer = (state = initState, action) => {
   switch (action.type) {
     case UPDATEPROFILE: {
       console.log('action PL inside profi reducer: ', action.payload);
+      localStorage.setItem('user', JSON.stringify(action.payload.body));
       return {
-        user: action.payload,
+        user: action.payload.body,
       };
     }
     case SETPROFILE: {

@@ -22,6 +22,7 @@ class UpperNavbar extends Component {
     super(props);
     this.state = {
       authFlag: true,
+      currentURL: '',
     };
   }
 
@@ -32,23 +33,20 @@ class UpperNavbar extends Component {
   }
 
   render() {
-    // let EmailId = localStorage.getItem('EmailId');
-    // let redirectVar = null;
-    // let currentURL = '';
-    // if (EmailId === false || EmailId === undefined || EmailId === null) {
-    //   redirectVar = <Redirect to="/login" />;
-    // } else {
-    //   EmailId = EmailId.charAt(0).toUpperCase() + EmailId.slice(1);
-    //   const urlstring = EmailId.replace('@', '%40');
-    //   currentURL = `https://splitwisebucket.s3.us-east-2.amazonaws.com/${urlstring}`;
-    // }
+    const profile = localStorage.getItem('user');
+    const currentUser = JSON.parse(profile);
+    const emailId = currentUser.emailId.charAt(0).toLowerCase() + currentUser.emailId.slice(1);
+    const urlstring = emailId.replace('@', '%40');
+    // eslint-disable-next-line no-underscore-dangle
+    this.state.currentURL = `https://splitwisebucket.s3.us-east-2.amazonaws.com/${urlstring}`;
+
     return (
       <Container className="upperNavbar">
         <div>
           {' '}
           <img id="logosplit" className="rounded-cirlce" src="https://assets.splitwise.com/assets/core/logo-wordmark-horizontal-white-short-c309b91b96261a8a993563bdadcf22a89f00ebb260f4f04fd814c2249a6e05d4.svg" />
 
-          <img id="profilepic" src="https://assets.splitwise.com/assets/core/logo-wordmark-horizontal-white-short-c309b91b96261a8a993563bdadcf22a89f00ebb260f4f04fd814c2249a6e05d4.svg" />
+          <img id="profilepic" src={this.state.currentURL} />
           <a
             href="/dashboard"
             id="dashboardlink"
@@ -69,19 +67,20 @@ class UpperNavbar extends Component {
           </a>
           <Dropdown>
             <Dropdown.Toggle variant="success" id="dropdown-basic">
-              {/* {EmailId} */}
+              {currentUser.name}
+&nbsp;
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
               <Dropdown.Item href="/profilepage">Your Profile</Dropdown.Item>
-              <Dropdown.Item href="/creategroup">Create Grp</Dropdown.Item>
+              <Dropdown.Item href="/creategroup">Create Group</Dropdown.Item>
               <Dropdown.Item
                 href="/login"
                 onClick={() => {
                   this.props.logoutDispatcher();
                 }}
               >
-                Logout
+                LOGOUT
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>

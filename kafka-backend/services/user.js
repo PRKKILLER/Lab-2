@@ -38,10 +38,11 @@ const login = async (msg, callback) => {
   console.log('inside login service', msg.emailId);
   try {
     const userRes = await User.findOne({ emailId: msg.emailId }).exec();
-    if (userRes === undefined && userRes === null) {
+    console.log('user res', userRes);
+    if (userRes === undefined || userRes === null || userRes.length === 0) {
       console.log('user doesnot exist');
       res.data = 'user doesnot exist';
-      res.status = 404;
+      res.status = 205;
       callback(null, res);
     }
     const userres = userRes;
@@ -55,7 +56,7 @@ const login = async (msg, callback) => {
         console.log('err', err);
         callback(null, 'error');
       } else if (!isMatch) {
-        res.status = 400;
+        res.status = 204;
         res.data = 'Wrong Password';
         callback(null, res);
       } else {
@@ -81,6 +82,30 @@ const updateDetails = async (msg, callback) => {
   try {
     // eslint-disable-next-line max-len
     const userRes = await User.findOneAndUpdate({ emailId: msg.emailId }, msg, { new: true, useFindAndModify: true });
+    if (userRes === undefined && userRes === null) {
+      console.log('user doesnot exist');
+      res.data = 'user doesnot exist';
+      res.status = 404;
+      callback(null, res);
+    } else {
+      await userRes.save();
+      res.data = userRes;
+      res.status = 200;
+      callback(null, res);
+    }
+  } catch (e) {
+    res.status = 404;
+    res.data = e;
+    callback(null, 'error');
+  }
+};
+
+const updateProfilePicture = async (msg, callback) => {
+  const res = {};
+  console.log('user updateProfilePicture service', msg);
+  try {
+    // eslint-disable-next-line max-len
+    const userRes = await User.findOneAndUpdate({ emailId: msg.emailId }, { image: msg.image }, { new: true, useFindAndModify: true });
     if (userRes === undefined && userRes === null) {
       console.log('user doesnot exist');
       res.data = 'user doesnot exist';
@@ -134,6 +159,9 @@ function handleRequest(msg, callback) {
   } else if (msg.path === 'getAllUsersExceptCurrent') {
     delete msg.path;
     getAllUsersExceptCurrent(msg, callback);
+  } else if (msg.path === 'updateProfilePicture') {
+    delete msg.path;
+    updateProfilePicture(msg, callback);
   }
 }
 

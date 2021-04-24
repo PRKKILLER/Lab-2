@@ -24,13 +24,13 @@ const profileUpdate = (payload) => (dispatch) => {
   axios.post(`${API.host}/userProfile/userDetails`, payload, config)
     .then((res) => {
       if (res.status === 200) {
-        console.log(res);
         alert('Profile updated successfuly!');
+        console.log(res.data);
         dispatch(profileUpdateDispatcher(res.data));
       }
     })
     .catch((errors) => {
-      alert(errors);
+      console.log(errors);
     });
 };
 

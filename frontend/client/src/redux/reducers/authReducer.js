@@ -9,7 +9,7 @@ const initialState = {
   tempUser: {},
 };
 
-const reducer = (state = initialState, action) => {
+const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case login: {
       console.log('login', action.payload);
@@ -17,7 +17,6 @@ const reducer = (state = initialState, action) => {
       localStorage.setItem('user', JSON.stringify(action.payload.body.data));
       return {
         authenticated: true, // after update user formsubmition reset
-        tempUser: action.payload,
       };
     }
     case signup: {
@@ -26,7 +25,6 @@ const reducer = (state = initialState, action) => {
       localStorage.setItem('user', JSON.stringify(action.payload.body.data));
       return {
         authenticated: true, // after update user formsubmition reset
-        tempUser: action.payload,
       };
     }
     case unauthenticated: {
@@ -38,6 +36,7 @@ const reducer = (state = initialState, action) => {
     case logout: {
       console.log('Inside logout');
       localStorage.removeItem('token');
+      localStorage.removeItem('user');
       return {
         authenticated: false, // after update user formsubmition reset
       };
@@ -47,4 +46,4 @@ const reducer = (state = initialState, action) => {
   }
 };
 
-export default reducer;
+export default authReducer;

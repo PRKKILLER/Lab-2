@@ -35,14 +35,6 @@ class Login extends Component {
     this.submitLogin = this.submitLogin.bind(this);
   }
 
-  // Call the Will Mount to set the auth Flag to false
-  UNSAFE_componentWillMount() {
-    this.setState({
-      // eslint-disable-next-line react/no-unused-state
-      authFlag: false,
-    });
-  }
-
     // username change handler to update state variable with the text entered by the user
     emailIdChangeHandler = (e) => {
       this.setState({
@@ -68,8 +60,8 @@ class Login extends Component {
       // make a post request with the user data
         const data = { emailId, password };
         this.props.loginUser(data);
-        this.props.setProfileDispatcher();
-        console.log('current props: ', this.props.currentUser);
+        // this.props.setProfileDispatcher();
+        console.log('current props: ', this.props);
       } else {
         alert('Enter valid Email Id');
       }

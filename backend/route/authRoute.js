@@ -87,8 +87,15 @@ router.post('/login', async (req, res) => {
       res.status(200).json({
         body: results,
       });
-    } else if (results.status === 400) {
-      res.status(204);
+    } else if (results.status === 204) {
+      res.status(204).json({
+        body: results.data,
+      });
+      res.end();
+    } else if (results.status === 205) {
+      res.status(204).json({
+        body: results.data,
+      });
       res.end();
     }
   });
