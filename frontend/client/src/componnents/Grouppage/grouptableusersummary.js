@@ -8,19 +8,30 @@ import '../../styles/mygroups.css';
 
 class Usersummary extends Component {
   render() {
-    // console.log('this user summary props data', this.props.data);
+    console.log('this user summary props data', this.props.data);
+    if (this.props.data === undefined) {
+      return (
+        <div className="UserSummaryTable">
+          <ul className="list-group list-group-item-success">
+            <li>blah</li>
+            <li>blah</li>
+          </ul>
+        </div>
+
+      );
+    }
     return (
       <div className="UserSummaryTable">
         <ul className="list-group list-group-item-success">
-          {/* {this.props.data.map((usersummary) => (
+          {/* {this.props.data.body.map((usersummary) => (
             <li className="list-group-item">
-              {usersummary.UserId1}
+              {usersummary.userthatowes}
               {' '}
               Owes
               {' '}
-              {usersummary.UserId2}
+              {usersummary.userthatowns}
               {' '}
-              {usersummary.Owes}
+              {usersummary.owes}
               $
             </li>
           ))} */}
@@ -28,25 +39,6 @@ class Usersummary extends Component {
           <li>blah</li>
         </ul>
       </div>
-    //   <table className="table" id="grouppagetable">
-    //     <thead className="thead-dark">
-    //       <tr>
-    //         <th>Expense description</th>
-    //         <th>Amount</th>
-    //         <th>Date</th>
-    //       </tr>
-    //     </thead>
-    //     <tbody>
-    //       {this.props.data.map((expense) => (
-    //         <tr>
-    //           <td>{expense.Description}</td>
-    //           <td>{expense.Amount}</td>
-    //           <td>{expense.createdAt.slice(0, 10)}</td>
-    //         </tr>
-    //       ))}
-    //     </tbody>
-    //   </table>
-
     );
   }
 }

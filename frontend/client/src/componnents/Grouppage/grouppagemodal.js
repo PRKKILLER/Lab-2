@@ -25,31 +25,45 @@ class ExpenseModal extends Component {
     };
   }
 
-  // handleClose = () => this.setState({ show: false });
+  handleClose = () => this.setState({ show: false });
 
-  // handleShow = () => this.setState({ show: true });
+  handleShow = () => this.setState({ show: true });
 
-  // onChangeAmount = (amount) => this.setState({ amount: amount.target.value });
-  // // console.log();
+  onChangeAmount = (amount) => this.setState({ amount: amount.target.value });
+  // console.log();
 
-  // onChangeDesc = (description) => this.setState({ description: description.target.value });
+  onChangeDesc = (description) => this.setState({ description: description.target.value });
 
-  // handleSave = async () => {
-  //   const Amount = this.state.amount;
-  //   const Description = this.state.description;
-  //   const EmailId = localStorage.getItem('EmailId');
-  //   const { GroupId } = this.props;
-  //   const body = {
-  //     Amount,
-  //     Description,
-  //     EmailId,
-  //     GroupId,
-  //   };
-  //   const res = await axios.post('http://localhost:3002/individualgroup/addExpense', body);
-  //   if (res.status === 200) {
-  //     alert(res.data.body);
-  //   }
-  // }
+  handleSave = async () => {
+    const { amount } = this.state;
+    const { description } = this.state;
+    const profile = localStorage.getItem('user');
+    const currentUser = JSON.parse(profile);
+    const paidByName = currentUser.name;
+    const paidByEmail = currentUser.emailId;
+    const groupId = localStorage.getItem('groupId');
+    const groupName = localStorage.getItem('groupName');
+    const body = {
+      groupId,
+      groupName,
+      paidByEmail,
+      paidByName,
+      description,
+      amount,
+    };
+    let token = JSON.parse(localStorage.getItem('token'));
+    token = token.split(' ');
+    // token = token[1];
+    console.log(token[1]);
+    const config = {
+      headers: { Authorization: `Bearer ${token[1]}` },
+    };
+    console.log(body, 'addexpense body');
+    const res = await axios.post('http://localhost:3002/individualgroup/addExpense', body, config);
+    if (res.status === 200) {
+      console.log(res);
+    }
+  }
 
   render() {
     return (
