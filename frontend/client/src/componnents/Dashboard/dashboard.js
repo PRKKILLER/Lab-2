@@ -10,20 +10,16 @@ import React, { Component } from 'react';
 import '../../App.css';
 import axios from 'axios';
 import { Link, Redirect } from 'react-router-dom';
-import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-// import '../../index.css';
-import Jumbotron from 'react-bootstrap/Jumbotron';
+import { connect } from 'react-redux';
 import _ from 'lodash';
 import Header from './dashboardUpper';
 import Footer from './dashboardLower';
 import UpperNavbar from '../Commonpage/upperNavbar';
 import '../../styles/dashboard.css';
 import SideNavbar from '../Commonpage/SideNavbar';
+import { settleUp, userOwes, userOwed } from '../../redux/actions/dashboardAction';
 
-class dashboard extends Component {
+class Dashboard extends Component {
   constructor(props) {
     super(props);
 
@@ -35,17 +31,19 @@ class dashboard extends Component {
   }
 
   componentDidMount = async () => {
-    const EmailId = localStorage.getItem('EmailId');
-    let UserOwesRes = await axios.post('http://localhost:3002/dashboard/getUserOwes', { EmailId });
-    let UserOwedRes = await axios.post('http://localhost:3002/dashboard/getUserOwed', { EmailId });
-    console.log('UserOwesRes', UserOwesRes.data.response);
-    console.log('UserOwedRes', UserOwedRes.data.response);
-    UserOwesRes = UserOwesRes.data.response;
-    UserOwedRes = UserOwedRes.data.response;
-    this.setState({ UserOwedRes });
-    this.setState({ UserOwesRes });
+    const profile = localStorage.getItem('user');
+    const currentUser = JSON.parse(profile);
+    const { emailId } = currentUser;
+    const UserOwesRes = await axios.post('http://localhost:3002/dashboard/userOwes', { emailId });
+    const UserOwedRes = await axios.post('http://localhost:3002/dashboard/userOwed', { emailId });
+    console.log('UserOwesRes', UserOwesRes.data.data.body);
+    console.log('UserOwedRes', UserOwedRes.data.data.body);
+    this.setState({ UserOwedRes: UserOwedRes.data.data.body });
+    this.setState({ UserOwesRes: UserOwesRes.data.data.body });
+    const UserOwesArray = UserOwedRes.data.data.body;
+    const UserOwedArray = UserOwedRes.data.data.body;
     // const SettleupRes = await axios.post('http://localhost:3002/dashboard/settleup', {UserId1, UserId2,});
-    const owedList = UserOwedRes.map((user) => user.UserId1);
+    const owedList = UserOwedArray.map((user) => user.userthatowes);
     // const owesList = UserOwesRes.map((user) => user.UserId1);
     const settleUpList = owedList.map((user) => ({
       label: user,
@@ -57,14 +55,8 @@ class dashboard extends Component {
   render() {
     const token = localStorage.getItem('token');
     let redirectVar = null;
-    const currentURL = '';
     if (token === false || token === undefined || token === null) {
       redirectVar = <Redirect to="/login" />;
-    } else {
-      // EmailId = EmailId.charAt(0).toUpperCase() + EmailId.slice(1);
-      // const urlstring = EmailId.replace('@', '%40');
-      // currentURL = `https://splitwisebucket.s3.us-east-2.amazonaws.com/${urlstring}`;
-      // console.log('Current User url', currentURL);
     }
     return (
       <div>
@@ -78,4 +70,16 @@ class dashboard extends Component {
   }
 }
 
-export default dashboard;
+const mapStateToProps = (state) => ({
+  authUser: state.auth.authenticated,
+  userOwed: state.dashboard.userOwed,
+  userOwes: state.dashboard.userOwes,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  settleUp: (payload) => dispatch(settleUp(payload)),
+  userOwes: (payload) => dispatch(userOwes(payload)),
+  userOwed: (payload) => dispatch(userOwed(payload)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

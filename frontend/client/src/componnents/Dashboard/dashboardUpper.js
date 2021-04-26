@@ -54,11 +54,20 @@ class Header extends Component {
 
    handleSettle = async () => {
      console.log(this.state.selected);
+     const profile = localStorage.getItem('user');
+     const currentUser = JSON.parse(profile);
+     const { emailId } = currentUser;
      const settleUser = this.state.selected;
-     const currUser = localStorage.getItem('EmailId');
+     let token = JSON.parse(localStorage.getItem('token'));
+     token = token.split(' ');
+     // token = token[1];
+     console.log(token[1]);
+     const config = {
+       headers: { Authorization: `Bearer ${token[1]}` },
+     };
      //  console.log(settleUser, currUser);
      try {
-       const settleRes = await axios.post('http://localhost:3002/dashboard/settleup', { UserId1: settleUser, UserId2: currUser });
+       const settleRes = await axios.post('http://localhost:3002/dashboard/settleup', { userthatowes: settleUser, userthatowns: emailId }, config);
        console.log(settleRes);
      } catch (err) {
        console.log(err);

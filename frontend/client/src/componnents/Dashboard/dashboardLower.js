@@ -45,8 +45,8 @@ class Footer extends Component {
   }
 
   render() {
-    console.log(this.props.owes);
-    console.log(this.props.owed);
+    // console.log(this.props.owes);
+    // console.log(this.props.owed);
     return (
       <Container className="justify-content-md-center-lower">
         <Row>
@@ -58,18 +58,18 @@ class Footer extends Component {
             <ul>
               {this.props.owes.map((user) => (
                 <li className="relationship">
-                  <img src="https://splitwisebucket.s3.us-east-2.amazonaws.com/User1%40gmail.com" className="rounded-circle profilepic" alt="Avatar" />
+                  <img src="https://splitwisebucket.s3.us-east-2.amazonaws.com/user1%40gmail.com" className="rounded-circle profilepic" alt="Avatar" />
                   <span>
                     {' '}
-                    { user.UserId2 }
+                    { user.userthatowns }
                     {' '}
                     is owed
                     {' '}
-                    { user.Owes }
+                    { user.owes }
                     {' '}
                     from group
                     {' '}
-                    {user.GroupName}
+                    {user.groupName}
                     {' '}
                   </span>
                 </li>
@@ -80,18 +80,18 @@ class Footer extends Component {
             <ul>
               {this.props.owed.map((user) => (
                 <li className="relationship">
-                  <img src="https://splitwisebucket.s3.us-east-2.amazonaws.com/User1%40gmail.com" className="rounded-circle profilepic" alt="Avatar" />
+                  <img src="https://splitwisebucket.s3.us-east-2.amazonaws.com/user1%40gmail.com" className="rounded-circle profilepic" alt="Avatar" />
                   <span>
                     {' '}
-                    { user.UserId1 }
+                    { user.userthatowes }
                     {' '}
                     owes you
                     {' '}
-                    { user.Owes }
+                    { user.owes }
                     {' '}
                     from group
                     {' '}
-                    {user.GroupName}
+                    {user.groupName}
                     {' '}
                   </span>
                 </li>

@@ -43,6 +43,12 @@ router.post('/userOwes', async (req, res) => {
         data: results.data,
       });
       res.end();
+    } else if (results.status === 500) {
+      console.log('data inside userOwes route', results.data);
+      res.status(202).json({
+        data: results.data,
+      });
+      res.end();
     } else {
       res.json({
         data: results,
@@ -63,6 +69,12 @@ router.post('/userOwed', async (req, res) => {
     } else if (results.status === 200) {
       console.log('data inside userOwed route', results);
       res.status(200).json({
+        data: results.data,
+      });
+      res.end();
+    } else if (results.status === 500) {
+      console.log('data inside userOwes route', results.data);
+      res.status(202).json({
         data: results.data,
       });
       res.end();
