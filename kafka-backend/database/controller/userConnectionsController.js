@@ -12,7 +12,7 @@ const getDuesForGroup = async (groupId, emailId) => {
       userthatowes: emailId,
       owes: { $ne: 0 },
     });
-    if (duesObject !== undefined && duesObject !== null && duesObject !== []) {
+    if (duesObject.length !== 0) {
       return ({
         status: 200,
         body: duesObject,

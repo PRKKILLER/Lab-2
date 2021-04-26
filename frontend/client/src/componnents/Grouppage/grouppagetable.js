@@ -1,3 +1,5 @@
+/* eslint-disable no-alert */
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-unused-vars */
 /* eslint-disable max-len */
 /* eslint-disable react/button-has-type */
@@ -16,26 +18,23 @@ import {
 } from '../../redux/actions/individualGroupAction';
 
 class TablePage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      note: '',
+    };
+  }
+
   componentDidMount=async () => {
     const msg = {};
     msg.groupId = localStorage.getItem('groupId');
-    this.props.showExpense(msg);
-    // let token = JSON.parse(localStorage.getItem('token'));
-    // token = token.split(' ');
-    // // token = token[1];
-    // console.log(token[1]);
-    // const config = {
-    //   headers: { Authorization: `Bearer ${token[1]}` },
-    // };
-    // const resForExpenseList = await axios.post('http://localhost:3002/individualgroup/showExpanse', msg, config);
-    // console.log('Expanse', resForExpenseList.data.data.data);
-    // this.setState({ expenses: resForExpenseList.data.data });
-    // const resForUserSummary = await axios.post('http://localhost:3002/individualgroup/Groupsummary', msg, config);
-    // console.log('summary', resForUserSummary.data.data.body);
-    // this.setState({ usersummary: resForUserSummary.data.data });
   }
 
-  handleDeleteNote = async (transactioinId, NoteId) => {
+  handleTextChange = (e) => {
+    this.setState({ note: e.target.value });
+  };
+
+  handleDeleteNote = async (transactionId, NoteId) => {
     let token = JSON.parse(localStorage.getItem('token'));
     token = token.split(' ');
     // token = token[1];
@@ -46,16 +45,21 @@ class TablePage extends Component {
     const profile = localStorage.getItem('user');
     const currentUser = JSON.parse(profile);
     const { emailId } = currentUser;
-    const msg = { transactioinId, NoteId, emailId };
+    const msg = { transactionId, NoteId, emailId };
     const deleteres = await axios.post('http://localhost:3002/individualgroup/deleteNote', msg, config);
     if (deleteres.status === 204) {
-      alert(deleteres);
-      console.log(deleteres);
+      alert(deleteres.data);
+      console.log(deleteres.data);
+    } else if (deleteres.status === 205) {
+      alert(deleteres.data);
+      console.log(deleteres.data);
     }
-    console.log('delete response', deleteres);
+    alert('delete response', deleteres);
   }
 
-  handleCreateNote = async (transactioinId, note) => {
+  handleCreateNote = async (transactionId) => {
+    console.log(transactionId);
+    const { note } = this.state;
     let token = JSON.parse(localStorage.getItem('token'));
     token = token.split(' ');
     // token = token[1];
@@ -68,15 +72,17 @@ class TablePage extends Component {
     const { name } = currentUser;
     const { emailId } = currentUser;
     const msg = {
-      transactioinId, note, emailId, name,
+      transactionId, note, emailId, name,
     };
+    console.log('req body', msg);
     const createres = await axios.post('http://localhost:3002/individualgroup/createNote', msg, config);
     console.log('create note response', createres);
   }
 
   render() {
-    console.log(this.props.data, 'prop data');
-    if (this.props.data === null && this.props.data === undefined) {
+    console.log(this.props.data.data, 'prop data');
+    console.log(this.state.note);
+    if (this.props.data.data === undefined) {
       console.log('emptyadfacasdvadsvkjdsvjklsbdvoiuab');
       return (
         <table className="table" id="grouppagetable">
@@ -105,43 +111,32 @@ class TablePage extends Component {
             <th>Add Note</th>
           </tr>
         </thead>
-        {/* <tbody>
-          {this.props.data.map((expense) => (
+        <tbody>
+          {this.props.data.data.map((expense) => (
             <tr>
-              <td>{expense.description}</td>
-              <td>{expense.paidByName}</td>
+              <td className="Description">{expense.description}</td>
+              <td className="PaidBy">{expense.paidByName}</td>
               <td>{expense.amount}</td>
-              <td>{expense.date.slice(0, 10)}</td>
+              <td>{expense.date}</td>
+              <td>
+                <ul className="list-group noteslist">
+                  {expense.notes.map((note) => (
+                    <li className="list-group-item notes">
+                      {note.note}
+                      :
+                      {' '}
+                      {note.name}
+                      <button type="button" className="btn btn-warning btn-sm deletenote" onClick={() => this.handleDeleteNote(expense._id, note._id)}>Delete</button>
+                    </li>
+                  ))}
+                </ul>
+              </td>
+              <td>
+                <textarea placeholder="Add your comments" onChange={(e) => this.handleTextChange(e)}> </textarea>
+                <button className="btn btn-small btn-orange post" onClick={() => this.handleCreateNote(expense._id)}>Post</button>
+              </td>
             </tr>
           ))}
-        </tbody> */}
-        <tbody>
-          <tr>
-            <td className="Description">Expense description</td>
-            <td className="PaidBy">Paid By</td>
-            <td>Amount</td>
-            <td>Date</td>
-            <td>
-              <ul className="list-group noteslist">
-                <li className="list-group-item notes">
-                  Maine daru nahi piya be
-                  <button type="button" className="btn btn-warning btn-sm deletenote">Delete</button>
-                </li>
-                <li className="list-group-item notes">
-                  Maine daru nahi piya be
-                  <button type="button" className="btn btn-warning btn-sm deletenote">Delete</button>
-                </li>
-                <li className="list-group-item notes">
-                  Maine daru nahi piya be
-                  <button type="button" className="btn btn-warning btn-sm deletenote">Delete</button>
-                </li>
-              </ul>
-            </td>
-            <td>
-              <textarea placeholder="Add your comments"> </textarea>
-              <button className="btn btn-small btn-orange post">Post</button>
-            </td>
-          </tr>
         </tbody>
       </table>
 
@@ -149,17 +144,4 @@ class TablePage extends Component {
   }
 }
 
-// const mapStateToProps = (state) => ({
-//   notes: state.individualGroup.notes,
-//   expense: state.individualGroup.expense,
-// });
-
-// const mapDispatchToProps = (dispatch) => ({
-//   showExpense: (payload) => dispatch(showExpense(payload)),
-//   getNote: (payload) => dispatch(getNote(payload)),
-//   createNote: (payload) => dispatch(createNote(payload)),
-//   deleteNote: (payload) => dispatch(deleteNote(payload)),
-// });
-
-// export default connect(mapStateToProps, mapDispatchToProps)(TablePage);
 export default TablePage;

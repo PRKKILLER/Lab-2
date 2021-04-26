@@ -62,6 +62,7 @@ class ExpenseModal extends Component {
     const res = await axios.post('http://localhost:3002/individualgroup/addExpense', body, config);
     if (res.status === 200) {
       console.log(res);
+      alert('expense addded');
     }
   }
 

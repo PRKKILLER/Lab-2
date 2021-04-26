@@ -24,6 +24,7 @@ const TablePage = ({ data }) => (
         searching
         data={data}
         hover
+        entriesOptions={[2, 5, 10]}
       />
     </Row>
   </Container>

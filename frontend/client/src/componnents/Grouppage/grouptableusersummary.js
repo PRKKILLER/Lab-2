@@ -22,8 +22,8 @@ class Usersummary extends Component {
     }
     return (
       <div className="UserSummaryTable">
-        <ul className="list-group list-group-item-success">
-          {/* {this.props.data.body.map((usersummary) => (
+        {/* <ul className="list-group list-group-item-success"> */}
+        {/* {this.props.data.body.map((usersummary) => (
             <li className="list-group-item">
               {usersummary.userthatowes}
               {' '}
@@ -35,9 +35,9 @@ class Usersummary extends Component {
               $
             </li>
           ))} */}
+        {/* <li>blah</li>
           <li>blah</li>
-          <li>blah</li>
-        </ul>
+        </ul> */}
       </div>
     );
   }

@@ -195,6 +195,20 @@ class Creategroup extends Component {
                 onChange={(opt) => this.handleSelect(opt)}
               />
             </div>
+            <div className=" d-flex flex-row bd-highlight mb-3 fields ">
+              <Select
+                className="names"
+                options={this.state.users}
+                onChange={(opt) => this.handleSelect(opt)}
+              />
+            </div>
+            <div className=" d-flex flex-row bd-highlight mb-3 fields ">
+              <Select
+                className="names"
+                options={this.state.users}
+                onChange={(opt) => this.handleSelect(opt)}
+              />
+            </div>
             {this.state.memberSelect}
             <Button type="submit" className="btn-outline-info" onClick={this.addMoreUsers}> + Add more users </Button>
             <br />

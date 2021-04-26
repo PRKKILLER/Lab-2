@@ -47,7 +47,7 @@ const deleteNote = async (msg, callback) => {
     //   console.log(deletenoteRes.notes[i]._id, 'each note line 45');
     //   console.log(msg.noteId, 'noteId');
       if (String(deletenoteRes.notes[i]._id) === String(msg.noteId)) {
-        if(deletenoteRes.emailId !== msg.emailId ){
+        if (deletenoteRes.emailId !== msg.emailId) {
           res.data = 'u didnt write the note';
           res.status = 500;
           callback(null, res);
@@ -57,9 +57,9 @@ const deleteNote = async (msg, callback) => {
         break;
       }
     }
-    if (i === deletenoteRes.notes.length) {
+    if (i === deletenoteRes.notes.length + 1) {
       res.data = 'No Note Found';
-      res.status = 500;
+      res.status = 400;
       callback(null, res);
     }
     await deletenoteRes.save();

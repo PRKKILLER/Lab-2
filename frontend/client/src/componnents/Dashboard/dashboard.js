@@ -42,14 +42,16 @@ class Dashboard extends Component {
     this.setState({ UserOwesRes: UserOwesRes.data.data.body });
     const UserOwesArray = UserOwedRes.data.data.body;
     const UserOwedArray = UserOwedRes.data.data.body;
+    if (UserOwedArray !== undefined) {
     // const SettleupRes = await axios.post('http://localhost:3002/dashboard/settleup', {UserId1, UserId2,});
-    const owedList = UserOwedArray.map((user) => user.userthatowes);
-    // const owesList = UserOwesRes.map((user) => user.UserId1);
-    const settleUpList = owedList.map((user) => ({
-      label: user,
-      value: user,
-    }));
-    this.setState({ settleUpList });
+      const owedList = UserOwedArray.map((user) => user.userthatowes);
+      // const owesList = UserOwesRes.map((user) => user.UserId1);
+      const settleUpList = owedList.map((user) => ({
+        label: user,
+        value: user,
+      }));
+      this.setState({ settleUpList });
+    }
   }
 
   render() {
@@ -57,6 +59,27 @@ class Dashboard extends Component {
     let redirectVar = null;
     if (token === false || token === undefined || token === null) {
       redirectVar = <Redirect to="/login" />;
+    }
+    if (this.state.UserOwedRes === null) {
+      return (
+        <div>
+          {redirectVar}
+          <UpperNavbar />
+          <SideNavbar />
+          <Header />
+          <Footer owes={this.state.UserOwesRes} />
+        </div>
+      );
+    } if (this.state.UserOwesRes === null) {
+      return (
+        <div>
+          {redirectVar}
+          <UpperNavbar />
+          <SideNavbar />
+          <Header />
+          <Footer owed={this.state.UserOwedRes} />
+        </div>
+      );
     }
     return (
       <div>

@@ -17,7 +17,7 @@ import SideNavbar from '../Commonpage/SideNavbar';
 import UpperNavbar from '../Commonpage/upperNavbar';
 import TablePage from './grouppagetable';
 import '../../styles/grouppage.css';
-import Example from './grouppagemodal';
+import ExpenseModal from './grouppagemodal';
 import Usersummary from './grouptableusersummary';
 import {
   getGroupSummary, addExpense, showExpense, getNote, createNote, deleteNote,
@@ -54,37 +54,18 @@ class GroupPage extends Component {
 
   render() {
     // name={this.props.location.state.name});
-    console.log(this.props.expenses, 'expenses');
+    console.log(this.state.expenses, 'expenses');
     console.log(this.state.usersummary, 'summary');
     return (
       <div>
         <UpperNavbar />
         <SideNavbar />
-        <Example groupId={this.props.location.state.group}/>
+        <ExpenseModal groupId={this.props.location.state.group}/>
         <TablePage data={this.state.expenses}/>
         <Usersummary data={this.state.usersummary}/>
-
-        <TablePage />
-        <Usersummary />
       </div>
     );
   }
 }
 
-// const mapStateToProps = (state) => ({
-//   notes: state.individualGroup.notes,
-//   expense: state.individualGroup.expense,
-//   groupsummary: state.individualGroup.groupsummary,
-// });
-
-// const mapDispatchToProps = (dispatch) => ({
-//   showExpense: (payload) => dispatch(showExpense(payload)),
-//   getGroupSummary: (payload) => dispatch(getGroupSummary(payload)),
-//   addExpense: (payload) => dispatch(addExpense(payload)),
-//   getNote: (payload) => dispatch(getNote(payload)),
-//   createNote: (payload) => dispatch(createNote(payload)),
-//   deleteNote: (payload) => dispatch(deleteNote(payload)),
-// });
-
-// export default connect(mapStateToProps, mapDispatchToProps)(GroupPage);
 export default GroupPage;

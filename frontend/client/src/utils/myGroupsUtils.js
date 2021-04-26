@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable react/jsx-filename-extension */
 import React from 'react';
@@ -5,17 +6,28 @@ import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 
 const handleClick = async (ID, accepted) => {
-  const currentUser = localStorage.getItem('EmailId');
-  console.log(currentUser);
+  console.log('inside handle click', ID, accepted);
+  const profile = localStorage.getItem('user');
+  const currentUser = JSON.parse(profile);
+  console.log(currentUser.emailId);
+  const msg = {
+    emailId: currentUser.emailId,
+    groupId: ID,
+  };
   if (accepted) {
     // call leave group
-    const leavegrp = await axios.post('http://localhost:3002/mygroup/leaveGroup', { GroupId: ID, UserId: currentUser });
+    const leavegrp = await axios.post('http://localhost:3002/mygroup/leaveGroup', msg);
     console.log('leave group res', leavegrp);
-    alert(leavegrp.data);
+    if (leavegrp.status === 200) {
+      alert('group left');
+    }
     // call leave group
   } else {
-    const acceptinvitation = await axios.post('http://localhost:3002/mygroup/acceptinvitation', { GroupId: ID, UserId: currentUser });
+    const acceptinvitation = await axios.post('http://localhost:3002/mygroup/acceptinvitation', msg);
     console.log('accept res', acceptinvitation.data);
+    if (acceptinvitation.status === 200) {
+      alert('joined group');
+    }
     // call accept invite
   }
 };

@@ -91,13 +91,19 @@ router.post('/deleteNote', checkAuth, async (req, res) => {
         data: results.data,
       });
       res.end();
-    }else if (results.status === 500) {
-        console.log('u didnt write the note', results);
-        res.status(204).json({
-          data: 'u didnt write the note',
-        });
-        res.end();
-      } else {
+    } else if (results.status === 500) {
+      console.log('u didnt write the note', results);
+      res.status(200).json({
+        data: 'u didnt write the note',
+      });
+      res.end();
+    } else if (results.status === 400) {
+      console.log('No Note Found', results);
+      res.status(200).json({
+        data: 'No Note Found',
+      });
+      res.end();
+    } else {
       res.json({
         data: results.data,
       });

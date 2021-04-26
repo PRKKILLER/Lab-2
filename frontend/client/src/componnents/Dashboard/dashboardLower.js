@@ -45,6 +45,176 @@ class Footer extends Component {
   }
 
   render() {
+    if (this.props.owes === undefined && this.props.owes === undefined) {
+      return (
+        <Container className="justify-content-md-center-lower">
+          <Row>
+            <Col><h3 style={{ color: '#999' }}>You Owe</h3></Col>
+            <Col><h3 style={{ color: '#999' }}>You Are Owed</h3></Col>
+          </Row>
+          <div className="Row">
+            <div className="col" id="uowelist">
+              {/* <ul>
+              {this.props.owes.map((user) => (
+                <li className="relationship">
+                  <img src="https://splitwisebucket.s3.us-east-2.amazonaws.com/user1%40gmail.com" className="rounded-circle profilepic" alt="Avatar" />
+                  // <span>
+                    {' '}
+                    { user.userthatowns }
+                    {' '}
+                    is owed
+                    {' '}
+                    { user.owes }
+                    {' '}
+                    from group
+                    {' '}
+                    {user.groupName}
+                    {' '}
+                  </span>
+                </li>
+              ))}
+            </ul> */}
+            </div>
+            <div className="col" id="urowedlist">
+              {/* <ul>
+                {this.props.owed.map((user) => (
+                  <li className="relationship">
+                    <img src="https://splitwisebucket.s3.us-east-2.amazonaws.com/user1%40gmail.com" className="rounded-circle profilepic" alt="Avatar" />
+                    <span>
+                      {' '}
+                      { user.userthatowes }
+                      {' '}
+                      owes you
+                      {' '}
+                      { user.owes }
+                      {' '}
+                      from group
+                      {' '}
+                      {user.groupName}
+                      {' '}
+                    </span>
+                  </li>
+                ))}
+              </ul> */}
+            </div>
+          </div>
+        </Container>
+      );
+    }
+    if (this.props.owes === undefined) {
+      return (
+        <Container className="justify-content-md-center-lower">
+          <Row>
+            <Col><h3 style={{ color: '#999' }}>You Owe</h3></Col>
+            <Col><h3 style={{ color: '#999' }}>You Are Owed</h3></Col>
+          </Row>
+          <div className="Row">
+            <div className="col" id="uowelist">
+              {/* <ul>
+                {this.props.owes.map((user) => (
+                  <li className="relationship">
+                    <img src="https://splitwisebucket.s3.us-east-2.amazonaws.com/user1%40gmail.com" className="rounded-circle profilepic" alt="Avatar" />
+                    // <span>
+                      {' '}
+                      { user.userthatowns }
+                      {' '}
+                      is owed
+                      {' '}
+                      { user.owes }
+                      {' '}
+                      from group
+                      {' '}
+                      {user.groupName}
+                      {' '}
+                    </span>
+                  </li>
+                ))}
+              </ul> */}
+            </div>
+            <div className="col" id="urowedlist">
+              <ul>
+                {this.props.owed.map((user) => (
+                  <li className="relationship">
+                    <img src="https://splitwisebucket.s3.us-east-2.amazonaws.com/user1%40gmail.com" className="rounded-circle profilepic" alt="Avatar" />
+                    <span>
+                      {' '}
+                      { user.userthatowes }
+                      {' '}
+                      owes you
+                      {' '}
+                      { user.owes }
+                      {' '}
+                      from group
+                      {' '}
+                      {user.groupName}
+                      {' '}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </Container>
+      );
+    }
+    if (this.props.owed === undefined) {
+      return (
+        <div>
+          <Container className="justify-content-md-center-lower">
+            <Row>
+              <Col><h3 style={{ color: '#999' }}>You Owe</h3></Col>
+              <Col><h3 style={{ color: '#999' }}>You Are Owed</h3></Col>
+            </Row>
+            <div className="Row">
+              <div className="col" id="uowelist">
+                <ul>
+                  {this.props.owes.map((user) => (
+                    <li className="relationship">
+                      <img src="https://splitwisebucket.s3.us-east-2.amazonaws.com/user1%40gmail.com" className="rounded-circle profilepic" alt="Avatar" />
+                      <span>
+                        {' '}
+                        { user.userthatowns }
+                        {' '}
+                        is owed
+                        {' '}
+                        { user.owes }
+                        {' '}
+                        from group
+                        {' '}
+                        {user.groupName}
+                        {' '}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="col" id="urowedlist">
+                <ul>
+                  {/* {this.props.owed.map((user) => (
+                    <li className="relationship">
+                      <img src="https://splitwisebucket.s3.us-east-2.amazonaws.com/user1%40gmail.com" className="rounded-circle profilepic" alt="Avatar" />
+                      <span>
+                        {' '}
+                        { user.userthatowes }
+                        {' '}
+                        owes you
+                        {' '}
+                        { user.owes }
+                        {' '}
+                        from group
+                        {' '}
+                        {user.groupName}
+                        {' '}
+                      </span>
+                    </li>
+                  ))} */}
+                </ul>
+              </div>
+            </div>
+          </Container>
+        </div>
+      );
+    }
     // console.log(this.props.owes);
     // console.log(this.props.owed);
     return (
