@@ -26,7 +26,6 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { connect } from 'react-redux';
 import { setProfile, profileUpdate } from '../../redux/actions/profileAction';
-import { isEmpty } from 'lodash';
 
 class Profilepage extends Component {
   constructor(props) {
