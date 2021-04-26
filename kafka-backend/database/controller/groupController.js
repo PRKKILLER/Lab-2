@@ -23,4 +23,18 @@ const getGroupUsersWithoutCurrent = async (groupId, paidByEmail) => {
     console.log(e);
   }
 };
-module.exports = { getGroupUsersWithoutCurrent };
+
+const getGroupsList = async (msg) => {
+  console.log('inside getGroupslist list', msg);
+  // eslint-disable-next-line new-cap
+  try {
+    // eslint-disable-next-line max-len
+    const Res = await group.find().where('users.emailId').equals(msg.emailId);
+    console.log('response from getgroups', Res);
+    return (Res);
+  } catch (e) {
+    console.log('grouplist error', e);
+  }
+};
+
+module.exports = { getGroupUsersWithoutCurrent, getGroupsList };

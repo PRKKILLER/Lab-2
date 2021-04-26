@@ -47,6 +47,11 @@ const deleteNote = async (msg, callback) => {
     //   console.log(deletenoteRes.notes[i]._id, 'each note line 45');
     //   console.log(msg.noteId, 'noteId');
       if (String(deletenoteRes.notes[i]._id) === String(msg.noteId)) {
+        if(deletenoteRes.emailId !== msg.emailId ){
+          res.data = 'u didnt write the note';
+          res.status = 500;
+          callback(null, res);
+        }
         // console.log('line 46');
         deletenoteRes.notes.splice(i, 1);
         break;

@@ -52,9 +52,7 @@ const groupslist = async (msg, callback) => {
   // eslint-disable-next-line new-cap
   try {
     // eslint-disable-next-line max-len
-    const Res = await group.find().where('users.emailId').equals(msg.emailId)
-      .where('users.flag')
-      .equals(true);
+    const Res = await group.find().where('users.emailId').equals(msg.emailId);
     if (Res === undefined && Res === null) {
       console.log('group doesnot exist');
       res.data = 'group doesnot exist';

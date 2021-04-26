@@ -13,7 +13,7 @@ import Login from './Login/Login';
 import signup from './signup/signup';
 import dashboard from './Dashboard/dashboard';
 import creategroup from './CreateGroup/creategroup';
-import mygroups from './Mygroups/mygroups';
+import Mygroups from './Mygroups/mygroups';
 import GroupPage from './Grouppage/grouppage';
 import Recentactivity from './Recent Activity/recentactivity';
 import Profilepage from './Profile Page/Profilepage';
@@ -28,11 +28,12 @@ class Main extends Component {
         <Route path="/login" component={Login} />
         <Route exact path="/signup" component={signup} />
         <Route path="/dashboard" component={dashboard} />
-        {/* <Route path="/group/creategroup" component={creategroup} />
-        <Route path="/group/mygroups" component={mygroups} />  */}
+        <Route path="/creategroup" component={creategroup} />
+        <Route path="/mygroups" component={Mygroups} />
         {/* <Route path="/group/" render={(props) => <GroupPage {...props} />} /> */}
-        {/* <Route path="/group/individualgroup" component={GroupPage} />
-        <Route path="/activity/recentactivity" component={Recentactivity} /> */}
+        {/* <Route path="/group/individualgroup" component={GroupPage} /> */}
+        <Route exact path="/group/:groupId" render={(props) => <GroupPage {...props} />} />
+        <Route path="/recentactivity" component={Recentactivity} />
         <Route path="/profilepage" component={Profilepage} />
         <Route path="/landing" component={landing} />
       </div>

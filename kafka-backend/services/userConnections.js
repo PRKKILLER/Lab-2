@@ -69,7 +69,7 @@ const userOwes = async (msg, callback) => {
       callback(null, res);
     } else if (getUserOwesres.status === 500) {
       res.status = 500;
-      res.data = getUserOwesres;
+      res.data = getUserOwesres.body;
       callback(null, res);
     }
   } catch (e) {
@@ -95,7 +95,7 @@ const userOwed = async (msg, callback) => {
       callback(null, res);
     } else if (getUserOwedRes.status === 500) {
       res.status = 500;
-      res.data = getUserOwedRes;
+      res.data = getUserOwedRes.body;
       callback(null, res);
     }
   } catch (e) {

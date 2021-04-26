@@ -25,7 +25,7 @@ const getDuesForGroup = async (groupId, emailId) => {
   } catch (err) {
     console.log('err', err);
     return ({
-      statusCode: 500,
+      status: 500,
       body: err,
     });
   }
@@ -35,6 +35,7 @@ const getgroupSummary = async (groupId) => {
     console.log('inside getgroupSummary groupId', groupId);
     const summaryObject = await userconnections.find({
       groupId,
+      owes: { $ne: 0 },
     });
     if (summaryObject !== undefined && summaryObject !== null && summaryObject.length !== 0) {
       return ({
@@ -58,7 +59,7 @@ const getgroupSummary = async (groupId) => {
 const settleUpUsers = async (userthatowns, userthatowes) => {
   try {
     console.log('inside settleUpUsers groupId', userthatowns, userthatowes);
-    const settleUpUsersObject = await userconnections.findOneAndUpdate({ userthatowns, userthatowes }, { owes: 0 }, { new: true, useFindAndModify: true });
+    const settleUpUsersObject = await userconnections.updateMany({ userthatowns, userthatowes }, { owes: 0 }).exec();
     console.log('seetleup response', settleUpUsersObject);
     if (settleUpUsersObject !== undefined && settleUpUsersObject !== null && settleUpUsersObject.length !== 0) {
       return ({
@@ -149,6 +150,7 @@ const getUserOwed = async (emailId) => {
     console.log('inside getUserOwed', emailId);
     const getUserOwedObject = await userconnections.find({
       userthatowns: emailId,
+      owes: { $ne: 0 },
     });
     if (getUserOwedObject !== undefined && getUserOwedObject !== null && getUserOwedObject.length !== 0) {
       return ({
@@ -174,6 +176,7 @@ const getUserOwes = async (emailId) => {
     console.log('inside getUserOwes ', emailId);
     const summaryObject = await userconnections.find({
       userthatowes: emailId,
+      owes: { $ne: 0 },
     });
     if (summaryObject !== undefined && summaryObject !== null && summaryObject.length !== 0) {
       return ({
