@@ -20,9 +20,9 @@ router.post('/getRecentActivity', checkAuth, async (req, res) => {
         data: results.data,
       });
       res.end();
-    } else {
-      res.json({
-        data: results,
+    } else if (results.status === 204) {
+      res.status(200).json({
+        data: results.data,
       });
       res.end();
     }
