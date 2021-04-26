@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-alert */
 /* eslint-disable no-undef */
@@ -15,54 +17,68 @@ import { Redirect } from 'react-router';
 //   MDBBtn, MDBTable, MDBTableBody, MDBTableHead,
 // } from 'mdbreact';
 // import Table from 'react-bootstrap/Table';
+import { connect } from 'react-redux';
 import axios from 'axios';
 import Select from 'react-select';
 import UpperNavbar from '../Commonpage/upperNavbar';
 import '../../styles/mygroups.css';
 import TablePage from './mygroupstable';
+import { getGroups, leaveGroup, acceptInvitation } from '../../redux/actions/myGroupAction';
+// import isEmpty from lodash;
+import API from '../../config';
 
-class mygroups extends Component {
+class Mygroups extends Component {
   constructor(props) {
     super(props);
     this.state = {
       groupList: [],
-      options: [],
       redirect: false,
+      options: [],
       selected: '',
       selectedName: '',
       isgrouplistnull: true,
+      currentUser: {},
     };
   }
 
   componentDidMount = async () => {
-    const retrievedObject = localStorage.getItem('EmailId');
-    const groupListRes = await axios.get(`http://localhost:3002/mygroup/myGroupList/${retrievedObject}`);
-    console.log('Group  list', groupListRes);
-    const alert = null;
-    if (groupListRes.data.data === 'Not In Any Group') {
-      console.log('Render empty page');
-    } else {
-      console.log('inside else');
-      this.state.isgrouplistnull = false;
-      // const tableData = getDataForMyGroups(groupListRes.data.data);
-      // console.log('data', tableData);
-      this.setState({ groupList: groupListRes.data.data });
-      const options = [];
-      const groupList = groupListRes.data.data;
-      groupList.forEach((group) => {
-        options.push({
-          label: group.GroupName,
-          value: group.GroupId,
-        });
+    console.log('inside did mount');
+    const profile = localStorage.getItem('user');
+    this.state.currentUser = JSON.parse(profile);
+    const msg = {};
+    msg.emailId = this.state.currentUser.emailId;
+    await this.props.getGroups(msg);
+    let token = JSON.parse(localStorage.getItem('token'));
+    token = token.split(' ');
+    // token = token[1];
+    console.log(token[1]);
+    const config = {
+      headers: { Authorization: `Bearer ${token[1]}` },
+    };
+    axios.post(`${API.host}/mygroup/groupsList`, msg, config)
+      .then((res) => {
+        if (res.status === 200) {
+          console.log('group actioin:response from api', res.data);
+          this.setState({ groupList: res.data });
+          const options = [];
+          res.data.data.map((group) => options.push({
+            label: group.name,
+            value: group._id,
+          }));
+          console.log(options);
+          this.setState({ options });
+        }
+      })
+      .catch((errors) => {
+        console.log(errors);
       });
-      console.log(options);
-      this.setState({ options });
-    }
-  }
+  };
 
   handleChange = (option) => {
     // console.log(option.label);
     this.setState({ selected: option.value });
+    localStorage.setItem('groupId', option.value);
+    localStorage.setItem('groupName', option.label);
   }
 
   handleClick = () => {
@@ -70,26 +86,33 @@ class mygroups extends Component {
   }
 
   render() {
+    console.log(this.state.options);
+    console.log(this.state.selected);
     if (this.state.redirect) {
       return (
         <Redirect
           to={{
-            pathname: '/group/',
+            pathname: `/group/${this.state.selected}`,
             state: { group: this.state.selected },
           }}
         />
       );
     }
-    let EmailId = localStorage.getItem('EmailId');
+    if (// null and undefined check
+      Object.keys(this.state.currentUser).length === 0
+      && this.state.currentUser.constructor === Object) {
+      return (
+        <div>
+          <UpperNavbar />
+        </div>
+      );
+    }
     let redirectVar = null;
-    let currentURL = '';
-    if (EmailId === false || EmailId === undefined || EmailId === null) {
+    const profile = localStorage.getItem('user');
+    const currentUser = JSON.parse(profile);
+    console.log('46', currentUser);
+    if (currentUser === null && currentUser === undefined) {
       redirectVar = <Redirect to="/login" />;
-    } else {
-      EmailId = EmailId.charAt(0).toUpperCase() + EmailId.slice(1);
-      const urlstring = EmailId.replace('@', '%40');
-      currentURL = `https://splitwisebucket.s3.us-east-2.amazonaws.com/${urlstring}`;
-      console.log('Current User url', currentURL);
     }
     return (
       <div>
@@ -104,10 +127,20 @@ class mygroups extends Component {
           options={this.state.options}
           onChange={(opt) => this.handleChange(opt)}
         />
-        <TablePage data={this.state.groupList}/>
+        <TablePage data={this.state.groupList} />
       </div>
     );
   }
 }
 
-export default mygroups;
+const mapStateToProps = (state) => ({
+  mygroup: state.group.myGroups,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  getGroups: (payload) => dispatch(getGroups(payload)),
+  leaveGroup: (payload) => dispatch(leaveGroup(payload)),
+  acceptInvitation: (payload) => dispatch(acceptInvitation(payload)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Mygroups);

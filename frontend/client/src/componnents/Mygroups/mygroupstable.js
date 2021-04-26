@@ -13,9 +13,10 @@ import Col from 'react-bootstrap/Col';
 import '../../styles/mygroups.css';
 import getDataForMyGroups from '../../utils/myGroupsUtils';
 
-const TablePage = ({ data }) => {
-  const tableData = getDataForMyGroups(data);
-
+const TablePage = ({ data, email }) => {
+  const profile = localStorage.getItem('user');
+  const currentUser = JSON.parse(profile);
+  const tableData = getDataForMyGroups(data, currentUser.emailId);
   console.log('props', data);
   return (
     <Container className="justify-content-md-center-lower">

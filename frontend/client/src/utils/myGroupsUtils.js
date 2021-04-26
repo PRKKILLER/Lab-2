@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable react/jsx-filename-extension */
 import React from 'react';
 import Button from 'react-bootstrap/Button';
@@ -19,7 +20,17 @@ const handleClick = async (ID, accepted) => {
   }
 };
 
-const getDataForMyGroups = (data) => {
+const getUserIndex = (users, email) => {
+  for (let i = 0; i < users.length; i += 1) {
+    if (users[i].emailId === email) {
+      return i;
+    }
+  }
+  return -1;
+};
+
+const getDataForMyGroups = (data, email) => {
+  console.log(email);
   const columns = [
     {
       label: 'Name',
@@ -33,14 +44,17 @@ const getDataForMyGroups = (data) => {
     },
   ];
   const rows = [];
-  data.forEach((groups) => {
+  data.data.forEach((groups) => {
     // eslint-disable-next-line max-len
-    const button = groups.Flag ? <Button variant="outline-danger">Leave Group</Button> : <Button variant="outline-success">Group Invitation</Button>;
+    const index = getUserIndex(groups.users, email);
+    console.log(index);
+    console.log(groups.users);
+    const button = groups.users[index].flag ? <Button variant="outline-danger">Leave Group</Button> : <Button variant="outline-success">Group Invitation</Button>;
     rows.push({
-      id: groups.GroupId,
-      Name: groups.GroupName,
+      id: groups._id,
+      Name: groups.name,
       status: button,
-      clickEvent: () => handleClick(groups.GroupId, groups.Flag),
+      clickEvent: () => handleClick(groups._id, groups.users[index].flag),
     });
   });
   return {

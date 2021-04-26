@@ -15,7 +15,7 @@ router.post('/groupsList', checkAuth, async (req, res) => {
       });
     } else if (results.status === 200) {
       res.status(200).json({
-        data: results,
+        data: results.data,
       });
       res.end();
     } else {
