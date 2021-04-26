@@ -26,21 +26,21 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Link, Redirect } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
-import { Nav } from 'react-bootstrap';
-import Container from 'react-bootstrap/Container';
 import '../../styles/creategroup.css';
 import Select from 'react-select';
 import _ from 'lodash';
+import { connect } from 'react-redux';
+import { getUsers, createGroup, setGroupPicture } from '../../redux/actions/createGroupAction';
 
 // eslint-disable-next-line react/prefer-stateless-function
-class creategroup extends Component {
+class Creategroup extends Component {
   constructor(props) { // Call the constrictor of Super class i.e The Component
     super(props);
     // maintain the state required for this component
     this.state = {
       users: [],
       selected: [],
-      UserId: localStorage.getItem('EmailId'),
+      emailId: '',
       // selectedUser:'',
       memberSelect: [],
     };
@@ -69,15 +69,25 @@ class creategroup extends Component {
   }
 
   componentDidMount = async () => {
-    const email = localStorage.getItem('EmailId');
-    let userListRes = await axios.get(`http://localhost:3002/group/getAllUsersExceptCurrent/${email}`);
-    console.log(userListRes.data.body);
-    userListRes = userListRes.data.body;
+    const profile = localStorage.getItem('user');
+    const currentUser = JSON.parse(profile);
+    const { emailId } = currentUser;
+    this.props.getUsers({ emailId });
+    console.log(emailId);
+    let token = JSON.parse(localStorage.getItem('token'));
+    token = token.split(' ');
+    console.log(token[1]);
+    const config = {
+      headers: { Authorization: `Bearer ${token[1]}` },
+    };
+    let userListRes = await axios.post('http://localhost:3002/group/getAllUsersExceptCurrent', { emailId }, config);
+    console.log(userListRes.data.data.data);
+    userListRes = userListRes.data.data.data;
     const options = [];
     userListRes.forEach((user) => {
       options.push({
-        label: user.EmailId,
-        value: user.EmailId,
+        label: user.emailId,
+        value: user.emailId,
       });
     });
     console.log(options);
@@ -85,8 +95,8 @@ class creategroup extends Component {
   }
 
   handleSelect = (opt) => {
-    let newOpts = this.state.selected.concat({ EmailId: opt.value });
-    newOpts = _.uniqBy(newOpts, 'EmailId');
+    let newOpts = this.state.selected.concat({ emailId: opt.value });
+    newOpts = _.uniqBy(newOpts, 'emailId');
     this.setState({ selected: newOpts });
   }
 
@@ -101,30 +111,30 @@ class creategroup extends Component {
   handleSubmit = async (e) => {
     e.preventDefault();
     console.log('target', e.target.groupName.value);
-    const curentUser = localStorage.getItem('EmailId');
+    const profile = localStorage.getItem('user');
+    const currentUser = JSON.parse(profile);
     const selUsers = this.state.selected;
-    selUsers.push({ EmailId: curentUser });
     console.log('selected ', selUsers);
     const reqForCreate = {
-      GroupName: e.target.groupName.value,
-      CreatorEmail: curentUser,
+      name: e.target.groupName.value,
+      creatorId: currentUser.emailId,
+      users: selUsers,
     };
     console.log(reqForCreate);
+    console.log(selUsers);
     try {
       // console.log('selected list', this.state.selected);
-
-      const groupCreateRes = await axios.post('http://localhost:3002/group/creategroup', reqForCreate);
-      console.log('id: ', groupCreateRes.data.Groupdetails.GroupId);
-      console.log(selUsers[1]);
+      let token = JSON.parse(localStorage.getItem('token'));
+      token = token.split(' ');
+      // token = token[1];
+      console.log(token[1]);
+      const config = {
+        headers: { Authorization: `Bearer ${token[1]}` },
+      };
+      const groupCreateRes = await axios.post('http://localhost:3002/group/creategroup', reqForCreate, config);
+      console.log('id: ', groupCreateRes);
       if (groupCreateRes.status === 200) {
-        const addusergrp = await axios.post('http://localhost:3002/group/addusertorgrp', {
-          GroupName: reqForCreate.GroupName,
-          GroupId: groupCreateRes.data.Groupdetails.GroupId,
-          UserIds: selUsers,
-        });
-        if (addusergrp.status === 200) {
-          window.location.href = '/dashboard';
-        }
+        window.location.href = '/dashboard';
       }
     } catch (err) {
       alert(err);
@@ -133,16 +143,12 @@ class creategroup extends Component {
 
   render() {
     // console.log(this.state.selected);
-    let EmailId = localStorage.getItem('EmailId');
+    console.log(this.props.group);
+    console.log(this.props.users);
+    const token = localStorage.getItem('token');
     let redirectVar = null;
-    let currentURL = '';
-    if (EmailId === false || EmailId === undefined || EmailId === null) {
+    if (token === false || token === undefined || token === null) {
       redirectVar = <Redirect to="/login" />;
-    } else {
-      EmailId = EmailId.charAt(0).toUpperCase() + EmailId.slice(1);
-      const urlstring = EmailId.replace('@', '%40');
-      currentURL = `https://splitwisebucket.s3.us-east-2.amazonaws.com/${urlstring}`;
-      console.log('Current User url', currentURL);
     }
     return (
       <div>
@@ -201,4 +207,16 @@ class creategroup extends Component {
     );
   }
 }
-export default creategroup;
+
+const mapStateToProps = (state) => ({
+  group: state.createGroup.group,
+  users: state.createGroup.users,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  getUsers: (payload) => dispatch(getUsers(payload)),
+  createGroup: (payload) => dispatch(createGroup(payload)),
+  setGroupPicture: (payload) => dispatch(setGroupPicture(payload)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Creategroup);
